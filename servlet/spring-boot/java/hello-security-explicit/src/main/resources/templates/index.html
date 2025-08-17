@@ -1,0 +1,18 @@
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Hello Security!</title>
+</head>
+<body>
+<h1>注销页面</h1>
+<!--<a id="logout" th:href="@{/logout}">Log Out</a>-->
+<form th:action="@{/logout}" method="post">
+    <div>
+        <input type="text" name="username" placeholder="Username123"/>
+    </div>
+    <div>
+        <input type="password" name="password" placeholder="Password"/>
+    </div>
+    <input type="submit" value="Log in" />
+</form>
+</body>
+</html>
