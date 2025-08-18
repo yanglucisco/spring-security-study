@@ -1,5 +1,6 @@
 package org.yanglu.spring.security.study.example;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,11 +15,13 @@ import java.util.ArrayList;
  * @description desc
  * @date 2025/8/18 12:40
  **/
-@Component
+@Slf4j
+//@Component
 public class MyAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String name = authentication.getName();
+        log.info("获取到用户名："  + name);
         String password = authentication.getCredentials().toString();
         boolean shouldAuthenticateAgainstThirdPartySystem = true;
         if (shouldAuthenticateAgainstThirdPartySystem) {

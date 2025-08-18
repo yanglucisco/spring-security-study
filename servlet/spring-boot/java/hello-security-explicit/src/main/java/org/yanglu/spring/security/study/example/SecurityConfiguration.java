@@ -8,6 +8,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -32,7 +35,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authorize) -> authorize
                         .anyRequest().authenticated()
                 )
-                .httpBasic(withDefaults())
+//                .httpBasic(withDefaults())
 //                .logout(LogoutConfigurer::permitAll)
 
                 .formLogin(form -> form.loginPage("/login").permitAll());
@@ -45,12 +48,25 @@ public class SecurityConfiguration {
     // @formatter:off
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
+        UserDetails user = User.withDefaultPasswordEncoder().passwordEncoder(s -> passwordEncoder().encode(s))
                 .username("user")
                 .password("password")
                 .roles("USER")
                 .build();
         return new InMemoryUserDetailsManager(user);
+    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+//    @Bean
+//    public UserDetailsService userDetailsService1() {
+//        // 返回自定义的 UserDetailsService 实现（如 JPA、JDBC 或内存）
+//        return new MyUserDetailsService();
+//    }
+    @Bean
+    public CustomAuthenticationProvider customAuthenticationProvider() {
+        return new CustomAuthenticationProvider(userDetailsService(), passwordEncoder());
     }
     // @formatter:on
 

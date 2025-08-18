@@ -1,2 +1,5 @@
 server:
-  port: 13001
+ port: 13001
+logging:
+ level:
+  org.springframework.security: DEBUG
