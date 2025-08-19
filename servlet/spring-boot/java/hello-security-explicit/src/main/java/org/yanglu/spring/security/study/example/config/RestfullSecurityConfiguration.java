@@ -1,4 +1,4 @@
-package org.yanglu.spring.security.study.example.pages.config;
+package org.yanglu.spring.security.study.example.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +11,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.yanglu.spring.security.study.example.CustomAuthenticationProvider;
@@ -35,6 +39,9 @@ public class RestfullSecurityConfiguration {
                         authorize.requestMatchers("/test", "/index.html",
                                 "/restlogin/test1", "/restlogin/test").permitAll().anyRequest().authenticated()
                 )
+                .passwordManagement((management) -> management
+                        .changePasswordPage("/update-password")
+                )
                 .formLogin(form -> form.loginPage("/login").permitAll());
         return http.build();
     }
@@ -50,9 +57,11 @@ public class RestfullSecurityConfiguration {
     }
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails userDetails = User.withDefaultPasswordEncoder()
+        UserDetails userDetails = User.builder()
                 .username("user")
-                .password("password")
+                .password("$argon2id$v=19$m=16384,t=2,p=1$1dmntPi6T5vXRMgKHV5baQ$NLFA8dJBgupBrrSdD37xo1SyRS4bqdtEY5Nc+tRsGJ4")
+//                .password("{bcrypt}$2a$10$FPIefipSMFV8xdpBDFH72uGEicyUEGvKcAoTou6pGZze.dJlulumO")
+                //         {bcrypt}$2a$10$jdPMWXpanVAE5gWVqUgoKe0KAC6oTf0twQerQ6Ca4Z0sRzeXN3.0O
                 .roles("USER")
                 .build();
 
@@ -61,6 +70,16 @@ public class RestfullSecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        PasswordEncoder pe = Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8();
+//        String s = pe.encode("password");
+//         PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//        return Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8();
+        BCryptPasswordEncoder r = new BCryptPasswordEncoder();
+        String s1 = pe.encode("password");
+//        String s2 = SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8().encode("password");
+        String s3 = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8().encode("password");
+        return Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
+//        return pe;
     }
+
 }

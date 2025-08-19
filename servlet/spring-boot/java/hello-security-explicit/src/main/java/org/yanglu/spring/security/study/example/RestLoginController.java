@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -16,9 +17,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/restlogin")
 public class RestLoginController {
     private final AuthenticationManager authenticationManager;
-
-    public RestLoginController(AuthenticationManager authenticationManager) {
+    private final PasswordEncoder passwordEncoder;
+    public RestLoginController(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
     }
     @GetMapping("test")
     public String test(){
@@ -31,6 +33,11 @@ public class RestLoginController {
         Authentication authenticationResponse =
                 this.authenticationManager.authenticate(authenticationRequest);
         return "成功";
+    }
+    @GetMapping("update-password")
+    public String updatePassword(@RequestParam(value = "password") String password){
+        String newStr = passwordEncoder.encode(password);
+        return newStr;
     }
 
     public record LoginRequest(String username, String password) {
