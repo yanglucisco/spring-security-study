@@ -25,6 +25,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         // 1. 获取用户输入的用户名和密码
         String username = authentication.getName();
+
         String password = authentication.getCredentials().toString();
 
         // 2. 从数据库加载用户详情

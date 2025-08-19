@@ -23,30 +23,22 @@ import static org.springframework.security.config.Customizer.withDefaults;
  *
  * @author Rob Winch
  */
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
 @Slf4j
 public class SecurityConfiguration {
-    @Bean
+//    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("调用filter");
-        // @formatter:off
         http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().authenticated()
+                .authorizeHttpRequests((authorize) ->
+                            authorize.requestMatchers("/test", "/index.html",
+                                    "/restlogin/test").permitAll().anyRequest().authenticated()
                 )
-//                .httpBasic(withDefaults())
-//                .logout(LogoutConfigurer::permitAll)
-
                 .formLogin(form -> form.loginPage("/login").permitAll());
-//                .formLogin(withDefaults());
-        // @formatter:on
         return http.build();
     }
-
-
-    // @formatter:off
-    @Bean
+//    @Bean
     public InMemoryUserDetailsManager userDetailsService() {
         UserDetails user = User.withDefaultPasswordEncoder().passwordEncoder(s -> passwordEncoder().encode(s))
                 .username("user")
@@ -55,20 +47,14 @@ public class SecurityConfiguration {
                 .build();
         return new InMemoryUserDetailsManager(user);
     }
-    @Bean
+//    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 //    @Bean
-//    public UserDetailsService userDetailsService1() {
-//        // 返回自定义的 UserDetailsService 实现（如 JPA、JDBC 或内存）
-//        return new MyUserDetailsService();
-//    }
-    @Bean
     public CustomAuthenticationProvider customAuthenticationProvider() {
         return new CustomAuthenticationProvider(userDetailsService(), passwordEncoder());
     }
-    // @formatter:on
 
 }
 
