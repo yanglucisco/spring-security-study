@@ -34,15 +34,18 @@ public class RestfullSecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("调用filter");
+//        .defaultSuccessUrl("/index") // 登录成功后跳转到指定页面
+//                .failureUrl("/login-error.html")
         http
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/test", "/index.html",
+                        authorize.requestMatchers("/index.html","/favicon.ico","/index","/error",
                                 "/restlogin/test1", "/restlogin/test").permitAll().anyRequest().authenticated()
                 )
-                .passwordManagement((management) -> management
-                        .changePasswordPage("/update-password")
-                )
-                .formLogin(form -> form.loginPage("/login").permitAll());
+//                .passwordManagement((management) -> management
+//                        .changePasswordPage("/update-password")
+//                )
+                .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/index.html")
+                        .failureUrl("/error").permitAll());
         return http.build();
     }
     @Bean
