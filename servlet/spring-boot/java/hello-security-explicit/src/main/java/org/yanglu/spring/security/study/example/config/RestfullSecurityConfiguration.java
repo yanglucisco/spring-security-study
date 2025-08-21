@@ -38,7 +38,8 @@ public class RestfullSecurityConfiguration {
 //                .failureUrl("/login-error.html")
         http
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/index.html","/favicon.ico","/index","/error",
+                        authorize.requestMatchers("/index.html","/favicon.ico","/index","/error","/test",
+                                "/hello.html","/test1",
                                 "/restlogin/test1", "/restlogin/test").permitAll().anyRequest().authenticated()
                 )
 //                .passwordManagement((management) -> management
