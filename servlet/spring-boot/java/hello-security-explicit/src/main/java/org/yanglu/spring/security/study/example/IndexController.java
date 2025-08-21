@@ -38,5 +38,10 @@ public class IndexController {
         return "error";
     }
 
+    @GetMapping("/testaut")
+    public String testaut(){
+        return "testaut";
+    }
+
 }
 

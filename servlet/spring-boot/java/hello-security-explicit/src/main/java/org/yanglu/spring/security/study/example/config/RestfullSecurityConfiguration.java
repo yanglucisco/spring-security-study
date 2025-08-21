@@ -39,8 +39,10 @@ public class RestfullSecurityConfiguration {
         http
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/index.html","/favicon.ico","/index","/error","/test",
-                                "/hello.html","/test1",
-                                "/restlogin/test1", "/restlogin/test").permitAll().anyRequest().authenticated()
+                                "/hello.html",
+                                "/restlogin/test1", "/restlogin/test").permitAll()
+                                .requestMatchers("/testaut").hasRole("USER")
+                                .anyRequest().authenticated()
                 )
 //                .passwordManagement((management) -> management
 //                        .changePasswordPage("/update-password")
@@ -59,18 +61,18 @@ public class RestfullSecurityConfiguration {
 
         return new ProviderManager(authenticationProvider);
     }
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails userDetails = User.builder()
-                .username("user")
-                .password("$argon2id$v=19$m=16384,t=2,p=1$1dmntPi6T5vXRMgKHV5baQ$NLFA8dJBgupBrrSdD37xo1SyRS4bqdtEY5Nc+tRsGJ4")
-//                .password("{bcrypt}$2a$10$FPIefipSMFV8xdpBDFH72uGEicyUEGvKcAoTou6pGZze.dJlulumO")
-                //         {bcrypt}$2a$10$jdPMWXpanVAE5gWVqUgoKe0KAC6oTf0twQerQ6Ca4Z0sRzeXN3.0O
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(userDetails);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        UserDetails userDetails = User.builder()
+//                .username("user")
+//                .password("$argon2id$v=19$m=16384,t=2,p=1$1dmntPi6T5vXRMgKHV5baQ$NLFA8dJBgupBrrSdD37xo1SyRS4bqdtEY5Nc+tRsGJ4")
+////                .password("{bcrypt}$2a$10$FPIefipSMFV8xdpBDFH72uGEicyUEGvKcAoTou6pGZze.dJlulumO")
+//                //         {bcrypt}$2a$10$jdPMWXpanVAE5gWVqUgoKe0KAC6oTf0twQerQ6Ca4Z0sRzeXN3.0O
+//                .roles("USER")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(userDetails);
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -81,8 +83,8 @@ public class RestfullSecurityConfiguration {
         BCryptPasswordEncoder r = new BCryptPasswordEncoder();
         String s1 = pe.encode("password");
 //        String s2 = SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8().encode("password");
-        String s3 = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8().encode("password");
-        return Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
+        String s3 = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("password");
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 //        return pe;
     }
 
