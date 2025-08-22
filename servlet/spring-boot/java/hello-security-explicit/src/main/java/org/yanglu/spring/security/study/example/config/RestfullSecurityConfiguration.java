@@ -38,7 +38,7 @@ public class RestfullSecurityConfiguration {
 //                .failureUrl("/login-error.html")
         http
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/index.html","/favicon.ico","/index","/error","/test",
+                        authorize.requestMatchers("/index.html","/favicon.ico","/index","/error",
                                 "/hello.html",
                                 "/restlogin/test1", "/restlogin/test").permitAll()
                                 .requestMatchers("/testaut").hasRole("USER")
