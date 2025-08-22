@@ -1,13 +1,17 @@
 package org.yanglu.spring.security.study.example.config;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,6 +25,10 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.yanglu.spring.security.study.example.CustomAuthenticationProvider;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
+
 /**
  * @author YangLu
  * @version 1.0
@@ -31,6 +39,8 @@ import org.yanglu.spring.security.study.example.CustomAuthenticationProvider;
 @EnableWebSecurity
 @Slf4j
 public class RestfullSecurityConfiguration {
+//    @Autowired
+//    MyAuthorizationManager authorizationManager;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("调用filter");
@@ -41,8 +51,23 @@ public class RestfullSecurityConfiguration {
                         authorize.requestMatchers("/index.html","/favicon.ico","/index","/error",
                                 "/hello.html",
                                 "/restlogin/test1", "/restlogin/test").permitAll()
-                                .requestMatchers("/testaut").hasRole("USER")
-                                .anyRequest().authenticated()
+
+//                                .requestMatchers("/testaut").access((a, b) -> {
+//                                    Collection<? extends GrantedAuthority> authorities = a.get().getAuthorities();
+//                                    return new AuthorizationDecision(false);
+//                                })
+                                .requestMatchers("/").authenticated()
+                                .anyRequest().access((a, b) -> {
+                                    Collection<? extends GrantedAuthority> authorities = a.get().getAuthorities();
+                                    if(authorities.stream().toList().get(0).getAuthority().equals("ROLE_USER123"))
+                                    {
+                                        return new AuthorizationDecision(true);
+                                    }
+                                    return new AuthorizationDecision(false);
+                                })
+
+//                                .anyRequest().authenticated()
+
                 )
 //                .passwordManagement((management) -> management
 //                        .changePasswordPage("/update-password")
