@@ -27,4 +27,17 @@ public class ArticlesController {
                 .bodyToMono(String[].class)
                 .block();
     }
+    @GetMapping(value = "/test")
+    public String test(
+            @RegisteredOAuth2AuthorizedClient("articles-client-authorization-server") OAuth2AuthorizedClient authorizedClient
+    ){
+//        return "test";
+        return this.webClient
+                .get()
+                .uri("http://127.0.0.1:8090/test")
+                .attributes(oauth2AuthorizedClient(authorizedClient))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
 }

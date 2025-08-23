@@ -13,9 +13,17 @@ public class ResourceServerConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.securityMatcher("/articles/**")
-                .authorizeHttpRequests(authorize -> authorize.anyRequest()
-                        .hasAuthority("SCOPE_articles.read"))
+//        http.securityMatcher("/articles/**")
+//                .authorizeHttpRequests(authorize ->
+//                        authorize.anyRequest()
+//                        .hasAuthority("SCOPE_articles.read"))
+//                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/articles/**").hasAuthority("SCOPE_articles.read")
+                .requestMatchers("/test/**").hasAuthority("SCOPE_server")
+                .anyRequest().authenticated()
+        )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
         return http.build();
     }

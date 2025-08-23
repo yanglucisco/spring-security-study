@@ -1,13 +1,21 @@
 package org.yanglu.spring.security.study.example;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Slf4j
 public class ArticlesController {
 
     @GetMapping("/articles")
     public String[] getArticles() {
+        log.info("获取articles... ...");
         return new String[] { "Article 1", "Article 2", "Article 3" };
+    }
+    @GetMapping("/test")
+    public String test() {
+        log.info("test... ...");
+        return "获取test成功";
     }
 }

@@ -22,6 +22,14 @@ spring:
             redirect-uri: "http://127.0.0.1:8080/authorized"
             scope: articles.read
             client-name: articles-client-authorization-code
+          articles-client-authorization-server:
+            provider: spring
+            client-id: account-service
+            client-secret: account-service-secret
+            authorization-grant-type: client_credentials
+            redirect-uri: "http://127.0.0.1:8080/authorized"
+            scope: server
+            client-name: articles-client-authorization-server
         provider:
           spring:
             issuer-uri: http://auth-server:9000

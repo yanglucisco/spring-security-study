@@ -4,7 +4,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -14,9 +21,15 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http.authorizeHttpRequests(auth -> auth
+//                .requestMatchers("/articles/**").hasAuthority("SCOPE_articles.read")
+//                .requestMatchers("/test/**").hasAuthority("SCOPE_server")
+//                .anyRequest().authenticated()
+//        )
         http
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests.anyRequest().authenticated()
+                .authorizeHttpRequests(authorizeRequests ->authorizeRequests
+//                                authorizeRequests.requestMatchers("/test/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2Login ->
                         oauth2Login.loginPage("/oauth2/authorization/articles-client-oidc"))
