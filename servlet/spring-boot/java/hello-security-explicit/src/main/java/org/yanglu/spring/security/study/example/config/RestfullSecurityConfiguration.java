@@ -73,7 +73,8 @@ public class RestfullSecurityConfiguration {
 //                        .changePasswordPage("/update-password")
 //                )
                 .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/index.html")
-                        .failureUrl("/error").permitAll());
+                        .failureUrl("/error").permitAll())
+        ;
         return http.build();
     }
     @Bean

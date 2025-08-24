@@ -44,10 +44,6 @@ public class DefaultSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest()
                         .authenticated())
-                //OAuth2ClientConfigurer<HttpSecurity>
-//                .oauth2Client(oAuth2ClientConfigurer -> {
-//
-//                })
                 .formLogin(withDefaults());
         return http.build();
     }
@@ -72,7 +68,6 @@ public class DefaultSecurityConfig {
                 .authorizationGrantTypes(gts -> {
                     gts.add(AuthorizationGrantType.AUTHORIZATION_CODE);
                     gts.add(AuthorizationGrantType.REFRESH_TOKEN);
-//                    gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
                 })
                 .redirectUris((uris -> {
                     uris.add("http://127.0.0.1:8080/login/oauth2/code/articles-client-oidc");
@@ -94,10 +89,6 @@ public class DefaultSecurityConfig {
                     gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
                     gts.add(AuthorizationGrantType.REFRESH_TOKEN);
                 })
-                .redirectUris((uris -> {
-                    uris.add("http://127.0.0.1:8080/login/oauth2/code/articles-client-oidc");
-                    uris.add("http://127.0.0.1:8080/authorized");
-                }))
                 .scopes(s -> {
                     s.add("openid");
                     s.add("server");

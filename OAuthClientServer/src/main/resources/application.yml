@@ -27,7 +27,7 @@ spring:
             client-id: account-service
             client-secret: account-service-secret
             authorization-grant-type: client_credentials
-            redirect-uri: "http://127.0.0.1:8080/authorized"
+#            redirect-uri: "http://127.0.0.1:8080/authorized"
             scope: server
             client-name: articles-client-authorization-server
         provider:

@@ -18,24 +18,35 @@ import org.springframework.web.bind.annotation.*;
 public class RestLoginController {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+
     public RestLoginController(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
     }
+
     @GetMapping("test")
-    public String test(){
+    public String test() {
         return "test";
     }
+
     @GetMapping("test1")
     public String login(@RequestParam(value = "userName") String userName, @RequestParam(value = "password") String password) {
         Authentication authenticationRequest =
                 UsernamePasswordAuthenticationToken.unauthenticated(userName, password);
-        Authentication authenticationResponse =
-                this.authenticationManager.authenticate(authenticationRequest);
-        return "成功";
+        try {
+            Authentication authenticationResponse =
+                    this.authenticationManager.authenticate(authenticationRequest);
+            if (authenticationResponse.isAuthenticated()) {
+                return "成功";
+            }
+        } catch (Exception ex) {
+            return "失败";
+        }
+        return "失败";
     }
+
     @GetMapping("update-password")
-    public String updatePassword(@RequestParam(value = "password") String password){
+    public String updatePassword(@RequestParam(value = "password") String password) {
         String newStr = passwordEncoder.encode(password);
         return newStr;
     }
