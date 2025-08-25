@@ -18,4 +18,9 @@ public class ArticlesController {
         log.info("test... ...");
         return "获取test成功";
     }
+    @GetMapping("/test1")
+    public String test1() {
+        log.info("test1111111... ...");
+        return "我是资源服务器test11111111";
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,12 +29,13 @@ import java.util.function.Consumer;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class DefaultSecurityConfig {
     @Bean
     @Order(1)
     SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+        OAuth2AuthorizationServerConfigurer a = http.getConfigurer(OAuth2AuthorizationServerConfigurer.class);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(withDefaults()); // Enable OpenID Connect 1.0
 
@@ -43,8 +45,9 @@ public class DefaultSecurityConfig {
     @Order(2)
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest()
-                        .authenticated())
-                .formLogin(withDefaults());
+                        .authenticated()).csrf(AbstractHttpConfigurer::disable)
+//                .formLogin(withDefaults())
+        ;
         return http.build();
     }
     @Bean
@@ -70,8 +73,8 @@ public class DefaultSecurityConfig {
                     gts.add(AuthorizationGrantType.REFRESH_TOKEN);
                 })
                 .redirectUris((uris -> {
-                    uris.add("http://127.0.0.1:8080/login/oauth2/code/articles-client-oidc");
-                    uris.add("http://127.0.0.1:8080/authorized");
+                    uris.add("http://auth-client:8080/login/oauth2/code/articles-client-oidc");
+                    uris.add("http://auth-client:8080/authorized");
                 }))
                 .scopes(s -> {
                     s.add("openid");

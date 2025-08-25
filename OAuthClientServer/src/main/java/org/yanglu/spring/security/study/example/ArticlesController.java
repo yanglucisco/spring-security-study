@@ -34,10 +34,27 @@ public class ArticlesController {
 //        return "test";
         return this.webClient
                 .get()
-                .uri("http://127.0.0.1:8090/test")
+                .uri("http://auth-resource:8090/test")
                 .attributes(oauth2AuthorizedClient(authorizedClient))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
+    }
+    @GetMapping(value = "/test1")
+    public String test1(
+            @RegisteredOAuth2AuthorizedClient("articles-client-authorization-server") OAuth2AuthorizedClient authorizedClient
+    ){
+//        return "test1";
+        return this.webClient
+                .get()
+                .uri("http://auth-resource:8090/test1")
+                .attributes(oauth2AuthorizedClient(authorizedClient))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
+    @GetMapping(value = "/test2")
+    public String test2(){
+        return "test1222222222222222222222222222222222";
     }
 }

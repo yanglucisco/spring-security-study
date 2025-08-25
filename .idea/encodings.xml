@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/OAuthClientServer/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/OAuthClientServer/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OAuthClientServer/src/main/resources/static/index.html" charset="GBK" />
     <file url="file://$PROJECT_DIR$/OAuthResourceServer/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/OAuthResourceServer/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/authentication/src/main/java" charset="UTF-8" />

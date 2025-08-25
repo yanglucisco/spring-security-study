@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class ResourceServerConfig {
 
     @Bean
@@ -22,9 +22,11 @@ public class ResourceServerConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/articles/**").hasAuthority("SCOPE_articles.read")
                 .requestMatchers("/test/**").hasAuthority("SCOPE_server")
+                        .requestMatchers("/test1/**").hasAuthority("SCOPE_server")
                 .anyRequest().authenticated()
         )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+        ;
         return http.build();
     }
 }
