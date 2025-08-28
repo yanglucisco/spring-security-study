@@ -23,4 +23,9 @@ public class ArticlesController {
         log.info("test1111111... ...");
         return "我是资源服务器test11111111";
     }
+    @GetMapping("/test3")
+    public String test3() {
+        log.info("333333333... ...");
+        return "我是资源服务器test333333333";
+    }
 }

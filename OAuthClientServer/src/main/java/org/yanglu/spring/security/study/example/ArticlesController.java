@@ -57,4 +57,17 @@ public class ArticlesController {
     public String test2(){
         return "test1222222222222222222222222222222222";
     }
+    @GetMapping(value = "/test3")
+    public String test3(
+            @RegisteredOAuth2AuthorizedClient("articles-brow") OAuth2AuthorizedClient authorizedClient
+    ){
+//        return "test1";
+        return this.webClient
+                .get()
+                .uri("http://auth-resource:8090/test3")
+                .attributes(oauth2AuthorizedClient(authorizedClient))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
 }

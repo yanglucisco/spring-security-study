@@ -44,9 +44,12 @@ public class DefaultSecurityConfig {
     @Bean
     @Order(2)
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest()
-                        .authenticated()).csrf(AbstractHttpConfigurer::disable)
-//                .formLogin(withDefaults())
+        http
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest()
+                        .authenticated())
+
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(withDefaults())
         ;
         return http.build();
     }
@@ -109,10 +112,22 @@ public class DefaultSecurityConfig {
                     s.add("server");
                 }).clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
 
+        RegisteredClient browClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("brow-client")
+                .clientSecret("{noop}brow-client")
+                .authorizationGrantTypes(gts -> {
+                    gts.add(AuthorizationGrantType.PASSWORD);
+//                    gts.add(AuthorizationGrantType.REFRESH_TOKEN);
+                })
+                .scopes(s -> {
+                    s.add("brow");
+                }).clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
+
         List<RegisteredClient> clients = new ArrayList<>();
         clients.add(articlesClient);
         clients.add(accountClient);
         clients.add(warehouseClient);
+        clients.add(browClient);
         return new InMemoryRegisteredClientRepository(clients);
     }
 

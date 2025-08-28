@@ -30,6 +30,14 @@ spring:
 #            redirect-uri: "http://127.0.0.1:8080/authorized"
             scope: server
             client-name: articles-client-authorization-server
+          articles-brow:
+            provider: spring
+            client-id: brow-client
+            client-secret: brow-client
+            authorization-grant-type: password
+            #            redirect-uri: "http://127.0.0.1:8080/authorized"
+            scope: brow
+            client-name: articles-brow
         provider:
           spring:
             issuer-uri: http://auth-server:9000
