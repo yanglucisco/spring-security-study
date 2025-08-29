@@ -1,0 +1,32 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>callback</title>
+</head>
+<body>
+<button onclick="startAuthro()">callback</button>
+<script type="text/javascript">
+    // 从回调 URL 解析授权码
+const code = new URLSearchParams(window.location.search).get('code');
+const verifier = localStorage.getItem('pkce_verifier');
+alert(code + "   " + verifier);
+
+// 请求令牌端点
+<!--fetch('http://auth-server:9000/oauth2/token', {-->
+<!--    method: 'POST',-->
+<!--    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },-->
+<!--    body: new URLSearchParams({-->
+<!--        grant_type: 'authorization_code',-->
+<!--        code: code,-->
+<!--        redirect_uri: 'http://auth-server:8080/web/callback.html',-->
+<!--        client_id: 'spa-client',-->
+<!--        code_verifier: verifier-->
+<!--    })-->
+<!--}).then(response => response.json())-->
+<!--  .then(data => {-->
+<!--      localStorage.setItem('access_token', data.access_token); // 存储令牌-->
+<!--  });-->
+
+</script>
+</body>
+</html>

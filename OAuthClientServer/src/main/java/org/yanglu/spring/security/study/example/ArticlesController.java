@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -74,5 +75,12 @@ public class ArticlesController {
     public String testPassword(
     ){
         return "testPassword-testPassword-testPassword-testPassword";
+    }
+    @PostMapping(value = "/test_post")
+    public YlTest testPost(){
+        YlTest ylTest = new YlTest();
+        ylTest.setAge(12);
+        ylTest.setName("yanglu");
+        return ylTest;
     }
 }

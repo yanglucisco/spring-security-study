@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -35,9 +36,15 @@ public class DefaultSecurityConfig {
     @Order(1)
     SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-        OAuth2AuthorizationServerConfigurer a = http.getConfigurer(OAuth2AuthorizationServerConfigurer.class);
-        http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-                .oidc(withDefaults()); // Enable OpenID Connect 1.0
+        http
+//                .exceptionHandling(exceptions -> exceptions
+//                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+//                )
+//                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                .getConfigurer(OAuth2AuthorizationServerConfigurer.class)
+                .oidc(withDefaults()) // Enable OpenID Connect 1.0
+
+        ;
 
         return http.formLogin(withDefaults()).build();
     }
@@ -46,10 +53,8 @@ public class DefaultSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/oauth2/token").permitAll()
                         .anyRequest()
                         .authenticated())
-//                .requestMatchers("/test/**").hasAuthority("SCOPE_server")
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(withDefaults())
         ;
@@ -136,12 +141,27 @@ public class DefaultSecurityConfig {
                     s.add("browser");
                 }).clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
 
+        RegisteredClient pkceClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("pkce-client")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .redirectUri("http://localhost:8080/web/callback.html")
+                .scope("openid")
+                .scope("pkce")
+                .clientSettings(
+                        ClientSettings.builder()
+                        .requireProofKey(true) // 强制 PKCE
+                        .requireAuthorizationConsent(true)
+                        .build())
+                .build();
+
         List<RegisteredClient> clients = new ArrayList<>();
         clients.add(articlesClient);
         clients.add(accountClient);
         clients.add(warehouseClient);
         clients.add(browClient);
         clients.add(passwordClient);
+        clients.add(pkceClient);
 
         return new InMemoryRegisteredClientRepository(clients);
     }
