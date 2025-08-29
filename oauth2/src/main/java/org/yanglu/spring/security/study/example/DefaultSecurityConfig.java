@@ -45,9 +45,11 @@ public class DefaultSecurityConfig {
     @Order(2)
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest()
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/oauth2/token").permitAll()
+                        .anyRequest()
                         .authenticated())
-
+//                .requestMatchers("/test/**").hasAuthority("SCOPE_server")
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(withDefaults())
         ;
@@ -113,14 +115,25 @@ public class DefaultSecurityConfig {
                 }).clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
 
         RegisteredClient browClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("brow-client")
-                .clientSecret("{noop}brow-client")
+                .clientId("browser-client")
+                .clientSecret("{noop}browser-client")
                 .authorizationGrantTypes(gts -> {
-                    gts.add(AuthorizationGrantType.PASSWORD);
-//                    gts.add(AuthorizationGrantType.REFRESH_TOKEN);
+                    gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
+                    gts.add(AuthorizationGrantType.REFRESH_TOKEN);
                 })
                 .scopes(s -> {
-                    s.add("brow");
+                    s.add("browser");
+                }).clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
+
+        RegisteredClient passwordClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("browser-client1")
+                .clientSecret("{noop}browser-client1")
+                .authorizationGrantTypes(gts -> {
+                    gts.add(AuthorizationGrantType.JWT_BEARER);
+                    gts.add(AuthorizationGrantType.REFRESH_TOKEN);
+                })
+                .scopes(s -> {
+                    s.add("browser");
                 }).clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
 
         List<RegisteredClient> clients = new ArrayList<>();
@@ -128,6 +141,8 @@ public class DefaultSecurityConfig {
         clients.add(accountClient);
         clients.add(warehouseClient);
         clients.add(browClient);
+        clients.add(passwordClient);
+
         return new InMemoryRegisteredClientRepository(clients);
     }
 

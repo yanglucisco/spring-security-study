@@ -23,9 +23,19 @@ public class ArticlesController {
         log.info("test1111111... ...");
         return "我是资源服务器test11111111";
     }
+    @GetMapping("/test2")
+    public String test2() {
+        log.info("22222222... ...");
+        return "我是资源服务器test222222222";
+    }
     @GetMapping("/test3")
     public String test3() {
-        log.info("333333333... ...");
-        return "我是资源服务器test333333333";
+        log.info("3333333333... ...");
+        return "我是资源服务器test3333333333333";
+    }
+    @GetMapping("/test_password")
+    public String testPassword() {
+        log.info("testPassword... ...");
+        return "我是资源服务器testPassword-testPassword-testPassword";
     }
 }

@@ -59,7 +59,7 @@ public class ArticlesController {
     }
     @GetMapping(value = "/test3")
     public String test3(
-            @RegisteredOAuth2AuthorizedClient("articles-brow") OAuth2AuthorizedClient authorizedClient
+            @RegisteredOAuth2AuthorizedClient("articles-browser") OAuth2AuthorizedClient authorizedClient
     ){
 //        return "test1";
         return this.webClient
@@ -69,5 +69,10 @@ public class ArticlesController {
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
+    }
+    @GetMapping(value = "/test_password")
+    public String testPassword(
+    ){
+        return "testPassword-testPassword-testPassword-testPassword";
     }
 }
