@@ -17,6 +17,7 @@
       <module>oauth2</module>
       <module>OAuthResourceServer</module>
       <module>OAuthClientServer</module>
+      <module>gateway</module>
   </modules>
 
   <properties>

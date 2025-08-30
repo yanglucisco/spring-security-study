@@ -123,7 +123,7 @@ public class DefaultSecurityConfig {
                 .clientId("browser-client")
                 .clientSecret("{noop}browser-client")
                 .authorizationGrantTypes(gts -> {
-                    gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
+                    gts.add(AuthorizationGrantType.PASSWORD);
                     gts.add(AuthorizationGrantType.REFRESH_TOKEN);
                 })
                 .scopes(s -> {

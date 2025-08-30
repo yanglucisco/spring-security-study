@@ -1,0 +1,2 @@
+Authorization: Basic + clientId:clientSecret的base64编码
+curl -X POST http://127.0.0.1:10000/oauth2/token  -H "Authorization: Basic YnJvd3Nlci1jbGllbnQ6YnJvd3Nlci1jbGllbnQ=" -d "grant_type=password&username=admin&password=password&scope=browser
