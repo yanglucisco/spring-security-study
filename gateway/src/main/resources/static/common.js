@@ -1,13 +1,13 @@
 
 
 async function exchangeToken(code) {
-    const verifier = 'gJqcM5dkGg1IZAZN92hhVjaVOORXuLyfkVn1PFbNucs';// sessionStorage.getItem('pkce_verifier');
-    const tokenUrl = 'http://auth-server:9000/oauth2/token';
+    const verifier = 'KJfy6FLCf1hmGGr-UHklF9eBeEjj84bTCwxnyc311Cc';// sessionStorage.getItem('pkce_verifier');
+    const tokenUrl = 'http://auth-gateway:10000/oauth2/token';
 
     const body = new URLSearchParams({
         grant_type: 'authorization_code',
         code,
-        redirect_uri: 'http://auth-client:8080/web/callback123.html',
+        redirect_uri: 'http://auth-gateway:10000/callback.html',
         client_id: 'pkce-client',
         code_verifier: verifier // 关键：验证身份[3](@ref)[6](@ref)[10](@ref)
     });
@@ -29,7 +29,7 @@ async function exchangeToken(code) {
 async function test() {
 
     try {
-        const response = await fetch('http://auth-server:9000/test', {
+        const response = await fetch('http://auth-gateway:10000/test', {
             method: 'get',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 //            body

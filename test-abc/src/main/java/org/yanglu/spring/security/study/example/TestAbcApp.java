@@ -8,11 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 @SpringBootApplication
-public class App 
+public class TestAbcApp
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello App!" );
-        SpringApplication.run(App.class, args);
+        System.out.println( "Hello TestAbcApp!" );
+        SpringApplication.run(TestAbcApp.class, args);
     }
 }

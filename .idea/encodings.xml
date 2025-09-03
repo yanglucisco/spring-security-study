@@ -20,5 +20,7 @@
     <file url="file://$PROJECT_DIR$/servlet/spring-boot/java/hello/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/test-abc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/test-abc/src/main/resources" charset="UTF-8" />
   </component>
 </project>

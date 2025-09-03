@@ -10,6 +10,14 @@ spring:
           uri: http://auth-server:9000
           predicates:
             - Path=/oauth2/**
+        - id: test_route1
+          uri: http://www.sina.com.cn
+          predicates:
+            - Path=/sina/**
+        - id: test_route2
+          uri: http://auth-server:9000
+          predicates:
+            - Path=/test/**
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG  # 开启网关核心日志

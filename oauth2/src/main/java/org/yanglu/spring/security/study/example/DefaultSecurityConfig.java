@@ -53,6 +53,8 @@ public class DefaultSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/oauth2/authorize").permitAll()
+                        .requestMatchers("/test").permitAll()
                         .anyRequest()
                         .authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
@@ -145,13 +147,13 @@ public class DefaultSecurityConfig {
                 .clientId("pkce-client")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .redirectUri("http://localhost:8080/web/callback.html")
+                .redirectUri("http://auth-gateway:10000/callback.html")
                 .scope("openid")
                 .scope("pkce")
                 .clientSettings(
                         ClientSettings.builder()
                         .requireProofKey(true) // 强制 PKCE
-                        .requireAuthorizationConsent(true)
+//                        .requireAuthorizationConsent(true)
                         .build())
                 .build();
 
