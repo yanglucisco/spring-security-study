@@ -38,4 +38,9 @@ public class ArticlesController {
         log.info("testPassword... ...");
         return "我是资源服务器testPassword-testPassword-testPassword";
     }
+    @GetMapping("/pkce")
+    public String pkce() {
+        log.info("pkcepkcepkce... ...");
+        return "我是资源服务器pkce pkce pkce pkce";
+    }
 }

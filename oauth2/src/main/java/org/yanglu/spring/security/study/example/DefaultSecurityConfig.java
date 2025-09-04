@@ -147,7 +147,7 @@ public class DefaultSecurityConfig {
                 .clientId("pkce-client")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .redirectUri("http://auth-gateway:10000/callback.html")
+                .redirectUri("http://auth-gateway:10000/index.html")
                 .scope("openid")
                 .scope("pkce")
                 .clientSettings(

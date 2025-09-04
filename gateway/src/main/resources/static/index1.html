@@ -1,0 +1,19 @@
+<html lang="zh-Hans-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>index</title>
+<!--    <script src="crypto-js.min.js"></script>-->
+<!--    <script src="OAuth2Common.js"></script>-->
+<!--    <script type="module" src="index.js"></script>-->
+
+</head>
+<body>
+<button onclick="test()">测试</button>
+<button onclick="test1()">测试1</button>
+<script>
+    function test(){
+        location.href = 'http://auth-server:9000/oauth2/authorize?response_type=code&client_id=pkce-client&scope=openid pkce&redirect_uri=http://auth-gateway:10000/index.html&code_challenge_method=S256&code_challenge=hQqHvGROSi0bvuXVAUXnSj1ZN1p1pDTpnKy5HZvvAso';
+    }
+</script>
+</body>
+</html>

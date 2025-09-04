@@ -24,6 +24,7 @@ public class ResourceServerConfig {
                 .requestMatchers("/test/**").hasAuthority("SCOPE_server")
                         .requestMatchers("/test1/**").hasAuthority("SCOPE_server")
                         .requestMatchers("/test3/**").hasAuthority("SCOPE_browser")
+                        .requestMatchers("/pkce/**").hasAuthority("SCOPE_pkce")
                 .anyRequest().authenticated()
         )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
