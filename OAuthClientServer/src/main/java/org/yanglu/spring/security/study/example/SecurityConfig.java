@@ -32,7 +32,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/test_post/**").permitAll()
 
                                                 .requestMatchers("/web/**").permitAll()
-                                                .requestMatchers("/articles1/**").permitAll()
+                                                // .requestMatchers("/articles1/**").permitAll()
                                                 .anyRequest().authenticated())
                                 .oauth2Login(
                                                 oauth2Login -> oauth2Login.loginPage(

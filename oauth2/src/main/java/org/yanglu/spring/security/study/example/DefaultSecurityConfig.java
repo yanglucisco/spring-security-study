@@ -73,7 +73,7 @@ public class DefaultSecurityConfig {
                 .build();
         return new InMemoryUserDetailsManager(user);
     }
-    // @Bean
+    @Bean
     @SuppressWarnings("unused")
     RegisteredClientRepository registeredClientRepository() {
         RegisteredClient articlesClient = RegisteredClient.withId(UUID.randomUUID().toString())
@@ -84,79 +84,80 @@ public class DefaultSecurityConfig {
                 .authorizationGrantTypes(gts -> {
                     gts.add(AuthorizationGrantType.AUTHORIZATION_CODE);
                     gts.add(AuthorizationGrantType.REFRESH_TOKEN);
+//                    gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
                 })
                 .redirectUris((uris -> {
-                    uris.add("http://auth-client:8080/login/oauth2/code/articles-client-oidc");
-                    uris.add("http://auth-client:8080/authorized");
+                    uris.add("http://127.0.0.1:8080/login/oauth2/code/articles-client-oidc");
+                    uris.add("http://127.0.0.1:8080/authorized");
                 }))
                 .scopes(s -> {
                     s.add("openid");
                     s.add("articles.read");
-                    // s.add("server");
-                })
-                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
-
-        RegisteredClient accountClient = RegisteredClient.withId(UUID.randomUUID().toString())
-        .clientId("account-service")
-                .clientSecret("{noop}account-service-secret")
-                .clientName("Account Client")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantTypes(gts -> {
-                    gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
-                    gts.add(AuthorizationGrantType.REFRESH_TOKEN);
-                })
-                .scopes(s -> {
-                    s.add("openid");
                     s.add("server");
                 })
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
 
-        RegisteredClient warehouseClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("warehouse-service")
-                .clientSecret("{noop}warehouse-service-secret")
-                .authorizationGrantTypes(gts -> {
-                    gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
-                    gts.add(AuthorizationGrantType.REFRESH_TOKEN);
-                })
-                .scopes(s -> {
-                    s.add("server");
-                }).clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
+        // RegisteredClient accountClient = RegisteredClient.withId(UUID.randomUUID().toString())
+        // .clientId("account-service")
+        //         .clientSecret("{noop}account-service-secret")
+        //         .clientName("Account Client")
+        //         .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+        //         .authorizationGrantTypes(gts -> {
+        //             gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
+        //             gts.add(AuthorizationGrantType.REFRESH_TOKEN);
+        //         })
+        //         .scopes(s -> {
+        //             s.add("openid");
+        //             s.add("server");
+        //         })
+        //         .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
 
-        RegisteredClient browClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("browser-client")
-                .clientSecret("{noop}browser-client")
-                .authorizationGrantTypes(gts -> {
-                    gts.add(AuthorizationGrantType.PASSWORD);
-                    gts.add(AuthorizationGrantType.REFRESH_TOKEN);
-                })
-                .scopes(s -> {
-                    s.add("browser");
-                }).clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
+        // RegisteredClient warehouseClient = RegisteredClient.withId(UUID.randomUUID().toString())
+        //         .clientId("warehouse-service")
+        //         .clientSecret("{noop}warehouse-service-secret")
+        //         .authorizationGrantTypes(gts -> {
+        //             gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
+        //             gts.add(AuthorizationGrantType.REFRESH_TOKEN);
+        //         })
+        //         .scopes(s -> {
+        //             s.add("server");
+        //         }).clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
 
-        RegisteredClient passwordClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("browser-client1")
-                .clientSecret("{noop}browser-client1")
-                .authorizationGrantTypes(gts -> {
-                    gts.add(AuthorizationGrantType.JWT_BEARER);
-                    gts.add(AuthorizationGrantType.REFRESH_TOKEN);
-                })
-                .scopes(s -> {
-                    s.add("browser");
-                }).clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
+        // RegisteredClient browClient = RegisteredClient.withId(UUID.randomUUID().toString())
+        //         .clientId("browser-client")
+        //         .clientSecret("{noop}browser-client")
+        //         .authorizationGrantTypes(gts -> {
+        //             gts.add(AuthorizationGrantType.PASSWORD);
+        //             gts.add(AuthorizationGrantType.REFRESH_TOKEN);
+        //         })
+        //         .scopes(s -> {
+        //             s.add("browser");
+        //         }).clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
 
-        RegisteredClient pkceClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("pkce-client")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .redirectUri("http://auth-gateway:10000/index.html")
-                .scope("openid")
-                .scope("pkce")
-                .clientSettings(
-                        ClientSettings.builder()
-                        .requireProofKey(true) // 强制 PKCE
-//                        .requireAuthorizationConsent(true)
-                        .build())
-                .build();
+        // RegisteredClient passwordClient = RegisteredClient.withId(UUID.randomUUID().toString())
+        //         .clientId("browser-client1")
+        //         .clientSecret("{noop}browser-client1")
+        //         .authorizationGrantTypes(gts -> {
+        //             gts.add(AuthorizationGrantType.JWT_BEARER);
+        //             gts.add(AuthorizationGrantType.REFRESH_TOKEN);
+        //         })
+        //         .scopes(s -> {
+        //             s.add("browser");
+        //         }).clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
+
+//         RegisteredClient pkceClient = RegisteredClient.withId(UUID.randomUUID().toString())
+//                 .clientId("pkce-client")
+//                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
+//                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//                 .redirectUri("http://auth-gateway:10000/index.html")
+//                 .scope("openid")
+//                 .scope("pkce")
+//                 .clientSettings(
+//                         ClientSettings.builder()
+//                         .requireProofKey(true) // 强制 PKCE
+// //                        .requireAuthorizationConsent(true)
+//                         .build())
+//                 .build();
 
         List<RegisteredClient> clients = new ArrayList<>();
         clients.add(articlesClient);

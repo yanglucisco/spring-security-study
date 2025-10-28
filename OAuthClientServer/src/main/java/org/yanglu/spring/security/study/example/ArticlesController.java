@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 public class ArticlesController {
 
@@ -28,10 +30,11 @@ public class ArticlesController {
                 .block();
     }
     @GetMapping(value = "/articles1")
-    public String getArticles1(
+    public String getArticles1(HttpServletRequest request 
         //     @RegisteredOAuth2AuthorizedClient("articles-client-authorization-code") OAuth2AuthorizedClient authorizedClient
     ) {
-        return "我是client的资源";
+        var session = request.getSession();
+        return "我是client的资源, sessionID: " + session.getId();
     }
     @GetMapping(value = "/test")
     public String test(

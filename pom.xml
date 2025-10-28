@@ -19,6 +19,7 @@
     <module>OAuthClientServer</module>
     <module>gateway</module>
     <module>test-abc</module>
+    <module>oauth-client-server1</module>
   </modules>
 
   <properties>
