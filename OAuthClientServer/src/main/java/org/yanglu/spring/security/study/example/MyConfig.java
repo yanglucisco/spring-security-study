@@ -10,6 +10,8 @@ import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedCli
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.yanglu.spring.security.config.MyTest;
+import org.yanglu.spring.security.filters.CustomFilter;
 
 /**
  * @author YangLu
@@ -20,6 +22,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class MyConfig {
     @Bean
+    @SuppressWarnings("unused")
     WebClient webClient(OAuth2AuthorizedClientManager authorizedClientManager) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
                 new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
@@ -28,6 +31,7 @@ public class MyConfig {
                 .build();
     }
     @Bean
+    @SuppressWarnings("unused")
     OAuth2AuthorizedClientManager authorizedClientManager(
             ClientRegistrationRepository clientRegistrationRepository,
             OAuth2AuthorizedClientRepository authorizedClientRepository) {
@@ -43,5 +47,15 @@ public class MyConfig {
         authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
 
         return authorizedClientManager;
+    }
+
+    @Bean
+    @SuppressWarnings("unused")
+    CustomFilter customFilter(){
+        return new CustomFilter(myTest());
+    }
+    @Bean
+    MyTest myTest(){
+        return new MyTest();
     }
 }

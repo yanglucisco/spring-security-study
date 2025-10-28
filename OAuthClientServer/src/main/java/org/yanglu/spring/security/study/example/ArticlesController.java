@@ -3,12 +3,11 @@ package org.yanglu.spring.security.study.example;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
+import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient;
 
 @RestController
 public class ArticlesController {
@@ -27,6 +26,12 @@ public class ArticlesController {
                 .retrieve()
                 .bodyToMono(String[].class)
                 .block();
+    }
+    @GetMapping(value = "/articles1")
+    public String getArticles1(
+        //     @RegisteredOAuth2AuthorizedClient("articles-client-authorization-code") OAuth2AuthorizedClient authorizedClient
+    ) {
+        return "我是client的资源";
     }
     @GetMapping(value = "/test")
     public String test(

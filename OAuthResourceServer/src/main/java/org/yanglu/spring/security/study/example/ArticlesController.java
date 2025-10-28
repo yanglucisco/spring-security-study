@@ -1,8 +1,9 @@
 package org.yanglu.spring.security.study.example;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
@@ -11,7 +12,7 @@ public class ArticlesController {
     @GetMapping("/articles")
     public String[] getArticles() {
         log.info("获取articles... ...");
-        return new String[] { "Article 1", "Article 2", "Article 3" };
+        return new String[] { "Article 1", "Article 2", "Article 3", "4", "5" };
     }
     @GetMapping("/test")
     public String test() {

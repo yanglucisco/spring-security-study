@@ -1,12 +1,15 @@
 package org.yanglu.spring.security.study.example;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.Customizer;
+import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,18 +25,13 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-
-import java.util.*;
-import java.util.function.Consumer;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity(debug = true)
 public class DefaultSecurityConfig {
     @Bean
     @Order(1)
+    @SuppressWarnings("unused")
     SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http
@@ -50,19 +48,21 @@ public class DefaultSecurityConfig {
     }
     @Bean
     @Order(2)
+    @SuppressWarnings("unused")
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/oauth2/authorize").permitAll()
-                        .requestMatchers("/test").permitAll()
+                        // .requestMatchers("/oauth2/authorize").permitAll()
+                        // .requestMatchers("/test").permitAll()
                         .anyRequest()
                         .authenticated())
-                .csrf(AbstractHttpConfigurer::disable)
+                // .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(withDefaults())
         ;
         return http.build();
     }
     @Bean
+    @SuppressWarnings("unused")
     UserDetailsService users() {
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         UserDetails user = User.builder()
@@ -73,7 +73,8 @@ public class DefaultSecurityConfig {
                 .build();
         return new InMemoryUserDetailsManager(user);
     }
-    @Bean
+    // @Bean
+    @SuppressWarnings("unused")
     RegisteredClientRepository registeredClientRepository() {
         RegisteredClient articlesClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("articles-client")
@@ -91,7 +92,7 @@ public class DefaultSecurityConfig {
                 .scopes(s -> {
                     s.add("openid");
                     s.add("articles.read");
-                    s.add("server");
+                    // s.add("server");
                 })
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
 
@@ -159,11 +160,11 @@ public class DefaultSecurityConfig {
 
         List<RegisteredClient> clients = new ArrayList<>();
         clients.add(articlesClient);
-        clients.add(accountClient);
-        clients.add(warehouseClient);
-        clients.add(browClient);
-        clients.add(passwordClient);
-        clients.add(pkceClient);
+        // clients.add(accountClient);
+        // clients.add(warehouseClient);
+        // clients.add(browClient);
+        // clients.add(passwordClient);
+        // clients.add(pkceClient);
 
         return new InMemoryRegisteredClientRepository(clients);
     }
