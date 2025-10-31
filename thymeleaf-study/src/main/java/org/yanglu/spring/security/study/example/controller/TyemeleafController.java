@@ -45,10 +45,11 @@ public class TyemeleafController {
     }
     @GetMapping("/home")
     public String home(HttpServletRequest request) {
+        // return "redirect:/login?base=r1";
         var session = request.getSession();
         var isLogin = session.getAttribute("isLogin");
         if(null == isLogin){
-            return "login";
+            return "redirect:/login?base=r1";
         }
         return "home";
     }
