@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+   <meta charset="UTF-8">
+   <title>欢迎页面</title>
+</head>
+<body>
+   <h1>欢迎, <span th:text="${name}">用户</span>!</h1>
+   <p th:text="'今天是: ' + ${date}"></p>
+   <form action="test1" method="get">
+        <input name="email"  />
+        <input name="password" tpye="password" />
+        <input id="submit" type="submit" value="转账" />
+   </form>
+</body>
+</html>
