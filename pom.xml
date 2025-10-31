@@ -20,6 +20,7 @@
     <module>gateway</module>
     <module>test-abc</module>
     <module>oauth-client-server1</module>
+    <module>thymeleaf-study</module>
   </modules>
 
   <properties>
