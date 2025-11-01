@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -37,7 +36,7 @@ public class SecurityConfig {
                                 .oauth2Login(
                                                 oauth2Login -> oauth2Login.loginPage(
                                                                 "/oauth2/authorization/articles-client-oidc"))
-                                .csrf(AbstractHttpConfigurer::disable)
+                                // .csrf(AbstractHttpConfigurer::disable)
                                 .oauth2Client(withDefaults());
                 return http.build();
         }

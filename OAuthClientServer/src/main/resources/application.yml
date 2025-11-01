@@ -14,30 +14,30 @@ spring:
             redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
             scope: openid
             client-name: articles-client-oidc
-          articles-client-authorization-code:
-            provider: spring
-            client-id: articles-client
-            client-secret: secret
-            authorization-grant-type: authorization_code
-            redirect-uri: "http://127.0.0.1:8080/authorized"
-            scope: articles.read
-            client-name: articles-client-authorization-code
-          articles-client-authorization-server:
-            provider: spring
-            client-id: account-service
-            client-secret: account-service-secret
-            authorization-grant-type: client_credentials
-#            redirect-uri: "http://127.0.0.1:8080/authorized"
-            scope: server
-            client-name: articles-client-authorization-server
-          articles-browser:
-            provider: spring
-            client-id: browser-client
-            client-secret: browser-client
-            authorization-grant-type: client_credentials
-            #            redirect-uri: "http://127.0.0.1:8080/authorized"
-            scope: browser
-            client-name: articles-browser
+#           articles-client-authorization-code:
+#             provider: spring
+#             client-id: articles-client
+#             client-secret: secret
+#             authorization-grant-type: authorization_code
+#             redirect-uri: "http://127.0.0.1:8080/authorized"
+#             scope: articles.read
+#             client-name: articles-client-authorization-code
+#           articles-client-authorization-server:
+#             provider: spring
+#             client-id: account-service
+#             client-secret: account-service-secret
+#             authorization-grant-type: client_credentials
+# #            redirect-uri: "http://127.0.0.1:8080/authorized"
+#             scope: server
+#             client-name: articles-client-authorization-server
+#           articles-browser:
+#             provider: spring
+#             client-id: browser-client
+#             client-secret: browser-client
+#             authorization-grant-type: client_credentials
+#             #            redirect-uri: "http://127.0.0.1:8080/authorized"
+#             scope: browser
+#             client-name: articles-browser
         provider:
           spring:
             issuer-uri: http://auth-server:9000

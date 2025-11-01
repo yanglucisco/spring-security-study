@@ -22,7 +22,7 @@ spring:
                - http://127.0.0.1:8080/authorized
              scopes:
                - openid
-               - articles.read
+              #  - articles.read
           articles-client1:
            registration:
              client-id: articles-client1
@@ -38,6 +38,6 @@ spring:
                - http://127.0.0.1:8080/authorized
              scopes:
                - openid
-               - articles.read
-               - server
+              #  - articles.read
+              #  - server
       
