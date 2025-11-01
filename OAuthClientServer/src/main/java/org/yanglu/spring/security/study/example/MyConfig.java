@@ -10,8 +10,8 @@ import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedCli
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.yanglu.spring.security.config.MyTest;
-import org.yanglu.spring.security.filters.CustomFilter;
+import org.yanglu.spring.security.study.example.config.MyTest;
+import org.yanglu.spring.security.study.example.filters.CustomFilter;
 
 /**
  * @author YangLu

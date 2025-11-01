@@ -1,9 +1,9 @@
-package org.yanglu.spring.security.filters;
+package org.yanglu.spring.security.study.example.filters;
 
 import java.io.IOException;
 
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.yanglu.spring.security.config.MyTest;
+import org.yanglu.spring.security.study.example.config.MyTest;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 // @PreFilter(value = "")
 public class CustomFilter extends OncePerRequestFilter {
 
-    public CustomFilter(org.yanglu.spring.security.config.MyTest mytest) {
+    public CustomFilter(org.yanglu.spring.security.study.example.config.MyTest mytest) {
         this.mytest = mytest;
     }
     private final MyTest mytest;

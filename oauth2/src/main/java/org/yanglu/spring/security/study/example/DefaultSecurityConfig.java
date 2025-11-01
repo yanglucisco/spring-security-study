@@ -73,7 +73,7 @@ public class DefaultSecurityConfig {
                 .build();
         return new InMemoryUserDetailsManager(user);
     }
-    @Bean
+    // @Bean
     @SuppressWarnings("unused")
     RegisteredClientRepository registeredClientRepository() {
         RegisteredClient articlesClient = RegisteredClient.withId(UUID.randomUUID().toString())
@@ -119,8 +119,8 @@ public class DefaultSecurityConfig {
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
 
         List<RegisteredClient> clients = new ArrayList<>();
-        clients.add(articlesClient);
-        clients.add(articlesClient1);
+        // clients.add(articlesClient);
+        // clients.add(articlesClient1);
 
         return new InMemoryRegisteredClientRepository(clients);
     }
