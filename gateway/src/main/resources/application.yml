@@ -6,6 +6,18 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: client
+          uri: http://127.0.0.1:8080
+          predicates:
+          - Path=/client/**
+          filters:
+            - StripPrefix=1        # 转发前去掉第一层路径 /client
+        - id: client1
+          uri: http://127.0.0.1:8081
+          predicates:
+          - Path=/client1/**
+          filters:
+            - StripPrefix=1        # 转发前去掉第一层路径 /client1
         - id: test_route
           uri: http://auth-server:9000
           predicates:
@@ -20,7 +32,7 @@ spring:
             - Path=/test/**
 logging:
   level:
-    org.springframework.cloud.gateway: DEBUG  # 开启网关核心日志
-    org.springframework.http.server.reactive: DEBUG  # 打印HTTP请求细节[2](@ref)[8](@ref)
+    '[org.springframework.cloud.gateway]': DEBUG  # 开启网关核心日志
+    '[org.springframework.http.server.reactive]': DEBUG  # 打印HTTP请求细节[2](@ref)[8](@ref)
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"  # 自定义日志格式[10](@ref)

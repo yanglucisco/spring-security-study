@@ -1,5 +1,6 @@
-package org.yanglu.spring.security.study.example;
+package org.yanglu.spring.security.study.example.config;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -10,6 +11,7 @@ import org.springframework.core.annotation.Order;
 import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,8 +25,10 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -35,32 +39,48 @@ public class DefaultSecurityConfig {
     SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http
-//                .exceptionHandling(exceptions -> exceptions
-//                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
-//                )
-//                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                // .exceptionHandling(exceptions -> exceptions
+                // .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+                // )
+                // .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(withDefaults()) // Enable OpenID Connect 1.0
-
         ;
+        http
+            // 配置异常处理，当需要认证时重定向到我们的自定义登录页
+            .exceptionHandling(exceptions -> exceptions
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/custom-login"))
+            )
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
 
         return http.formLogin(withDefaults()).build();
     }
+
     @Bean
     @Order(2)
     @SuppressWarnings("unused")
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        // .requestMatchers("/oauth2/authorize").permitAll()
-                        // .requestMatchers("/test").permitAll()
+                        .requestMatchers("/themeleaftest/**").permitAll()
+                        .requestMatchers("/login.html", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/custom-login", "/login").permitAll()
                         .anyRequest()
                         .authenticated())
-                // .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(withDefaults())
-        ;
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(
+                        // withDefaults()
+                        formLogin -> formLogin
+                                // 指定自定义登录页的URL
+                                .loginPage("/custom-login")
+                                // 指定处理登录认证的POST请求地址，与HTML表单action一致
+                                .loginProcessingUrl("/login")
+                                // 登录成功后的默认跳转页面
+                                // .defaultSuccessUrl("/home", true)
+                                );
         return http.build();
     }
+
     @Bean
     @SuppressWarnings("unused")
     UserDetailsService users() {
@@ -73,7 +93,8 @@ public class DefaultSecurityConfig {
                 .build();
         return new InMemoryUserDetailsManager(user);
     }
-    // @Bean
+
+    @Bean
     @SuppressWarnings("unused")
     RegisteredClientRepository registeredClientRepository() {
         RegisteredClient articlesClient = RegisteredClient.withId(UUID.randomUUID().toString())
@@ -84,7 +105,7 @@ public class DefaultSecurityConfig {
                 .authorizationGrantTypes(gts -> {
                     gts.add(AuthorizationGrantType.AUTHORIZATION_CODE);
                     gts.add(AuthorizationGrantType.REFRESH_TOKEN);
-//                    gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
+                    // gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
                 })
                 .redirectUris((uris -> {
                     uris.add("http://127.0.0.1:8080/login/oauth2/code/articles-client-oidc");
@@ -95,8 +116,10 @@ public class DefaultSecurityConfig {
                     s.add("articles.read");
                     s.add("server");
                 })
-                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
-        
+                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+                .tokenSettings(TokenSettings.builder().refreshTokenTimeToLive(Duration.ofMinutes(3)).build())
+                .build();
+
         RegisteredClient articlesClient1 = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("articles-client1")
                 .clientSecret("{noop}secret1")
@@ -105,7 +128,7 @@ public class DefaultSecurityConfig {
                 .authorizationGrantTypes(gts -> {
                     gts.add(AuthorizationGrantType.AUTHORIZATION_CODE);
                     gts.add(AuthorizationGrantType.REFRESH_TOKEN);
-//                    gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
+                    // gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
                 })
                 .redirectUris((uris -> {
                     uris.add("http://127.0.0.1:8081/login/oauth2/code/articles-client1-oidc");
@@ -116,11 +139,13 @@ public class DefaultSecurityConfig {
                     s.add("articles.read");
                     s.add("server");
                 })
-                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build()).build();
+                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+                .tokenSettings(TokenSettings.builder().refreshTokenTimeToLive(Duration.ofMinutes(3)).build())
+                .build();
 
         List<RegisteredClient> clients = new ArrayList<>();
-        // clients.add(articlesClient);
-        // clients.add(articlesClient1);
+        clients.add(articlesClient);
+        clients.add(articlesClient1);
 
         return new InMemoryRegisteredClientRepository(clients);
     }
