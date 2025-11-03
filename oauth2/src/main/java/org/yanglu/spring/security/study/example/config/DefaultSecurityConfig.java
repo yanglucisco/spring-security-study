@@ -109,6 +109,7 @@ public class DefaultSecurityConfig {
                 })
                 .redirectUris((uris -> {
                     uris.add("http://127.0.0.1:8080/login/oauth2/code/articles-client-oidc");
+                    // uris.add("http://127.0.0.1:8080/web/index.html");
                     uris.add("http://127.0.0.1:8080/authorized");
                 }))
                 .scopes(s -> {
@@ -143,9 +144,33 @@ public class DefaultSecurityConfig {
                 .tokenSettings(TokenSettings.builder().refreshTokenTimeToLive(Duration.ofMinutes(3)).build())
                 .build();
 
+        RegisteredClient gateway = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("gateway")
+                .clientSecret("{noop}gatewaysecret")
+                .clientName("gateway")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantTypes(gts -> {
+                    gts.add(AuthorizationGrantType.AUTHORIZATION_CODE);
+                    gts.add(AuthorizationGrantType.REFRESH_TOKEN);
+                    // gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
+                })
+                .redirectUris((uris -> {
+                    uris.add("http://127.0.0.1:10000/login/oauth2/code/gateway");
+                    uris.add("http://127.0.0.1:10000/authorized");
+                }))
+                .scopes(s -> {
+                    s.add("openid");
+                    // s.add("articles.read");
+                    // s.add("server");
+                })
+                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+                // .tokenSettings(TokenSettings.builder().refreshTokenTimeToLive(Duration.ofMinutes(3)).build())
+                .build();
+
         List<RegisteredClient> clients = new ArrayList<>();
         clients.add(articlesClient);
         clients.add(articlesClient1);
+         clients.add(gateway);
 
         return new InMemoryRegisteredClientRepository(clients);
     }

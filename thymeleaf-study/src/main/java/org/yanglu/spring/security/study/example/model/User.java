@@ -1,4 +1,4 @@
-package org.yanglu.spring.security.model;
+package org.yanglu.spring.security.study.example.model;
 
 import lombok.Data;
 

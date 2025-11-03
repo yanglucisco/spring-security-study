@@ -36,6 +36,13 @@ public class ArticlesController {
         var session = request.getSession();
         return "我是client的资源, sessionID: " + session.getId();
     }
+    @GetMapping(value = "/articles2")
+    public String getArticles2(HttpServletRequest request 
+        //     @RegisteredOAuth2AuthorizedClient("articles-client-authorization-code") OAuth2AuthorizedClient authorizedClient
+    ) {
+        var session = request.getSession();
+        return "我是client 的资源 articles2, sessionID: " + session.getId();
+    }
     @GetMapping(value = "/test")
     public String test(
             @RegisteredOAuth2AuthorizedClient("articles-client-authorization-server") OAuth2AuthorizedClient authorizedClient

@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.yanglu.spring.security.model.User;
+import org.yanglu.spring.security.study.example.model.User;
 
 import jakarta.servlet.http.HttpServletRequest;
 

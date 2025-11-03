@@ -6,30 +6,60 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: front
+          uri: http://127.0.0.1:11002
+          predicates:
+           - Path=/,/*.css,/*.js,/*.html,/favicon.ico
         - id: client
           uri: http://127.0.0.1:8080
           predicates:
-          - Path=/client/**
+           - Path=/client/**
           filters:
-            - StripPrefix=1        # 转发前去掉第一层路径 /client
+           - StripPrefix=1        # 转发前去掉第一层路径 /client
         - id: client1
           uri: http://127.0.0.1:8081
           predicates:
-          - Path=/client1/**
+           - Path=/client1/**
           filters:
-            - StripPrefix=1        # 转发前去掉第一层路径 /client1
+           - StripPrefix=1        # 转发前去掉第一层路径 /client1
         - id: test_route
           uri: http://auth-server:9000
           predicates:
-            - Path=/oauth2/**
+           - Path=/oauth2/**
         - id: test_route1
           uri: http://www.sina.com.cn
           predicates:
-            - Path=/sina/**
+           - Path=/sina/**
         - id: test_route2
           uri: http://auth-server:9000
           predicates:
-            - Path=/test/**
+           - Path=/test/**
+  security:
+    oauth2:
+      client:
+        registration:
+          gateway:
+            provider: spring
+            client-id: gateway
+            client-secret: gatewaysecret
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:10000/login/oauth2/code/{registrationId}"
+            scope: openid
+            client-name: gateway
+        provider:
+          spring:
+            issuer-uri: http://auth-server:9000
+  # security:
+  #   oauth2:
+  #     client:
+  #       registration:
+  #         keycloak:
+  #           client-id: edge-service
+  #           client-secret: polar-keycloak-secret
+  #           scope: openid
+  #       provider:
+  #         keycloak:
+  #           issuer-uri: http://localhost:8080/realms/PolarBookshop
 logging:
   level:
     '[org.springframework.cloud.gateway]': DEBUG  # 开启网关核心日志

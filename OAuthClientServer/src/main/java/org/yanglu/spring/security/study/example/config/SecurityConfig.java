@@ -1,4 +1,4 @@
-package org.yanglu.spring.security.study.example;
+package org.yanglu.spring.security.study.example.config;
 
 import java.util.List;
 
