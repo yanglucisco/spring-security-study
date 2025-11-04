@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <title>自定义登录</title>
 </head>
@@ -10,7 +11,7 @@
         用户名或密码错误
     </div>
     <!-- 注意：表单的 action 需要与配置的 loginProcessingUrl 一致 -->
-    <form method="post" action="/login">
+    <form method="post" th:action="@{/login}">
         <div>
             <label>用户名: <input type="text" name="username"/></label>
         </div>

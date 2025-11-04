@@ -5,7 +5,6 @@
    <title>index页面</title>
    <script>
     function a(){
-        console.log('测试')
         fetch('http://127.0.0.1:10000/client1/test')
             .then(res => {
                 console.log(res.status)
@@ -24,9 +23,35 @@
 </head>
 <body>
    <h1>我是index.html</h1>
+   <span>点击后，从后台获取数据，如果未登录，则跳转到收取服务器的登录页面</span>
    <button onclick="a()">测试按钮</button>
+   <h1 id="title">我是title的默认值</h1>
    <script>
-    
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 获取要插入数据的容器元素
+            const userListElement = document.getElementById('title')
+            const res = await fetch('http://127.0.0.1:10000/client1/test')
+            if(res.status === 401){
+                console.log('401未授权')
+                window.open('/oauth2/authorization/gateway', '_self')
+                return
+            }
+            const data = await res.text()
+            userListElement.innerHTML = data
+            // .then(res => {
+            //     console.log(res.status)
+            //     if(res.status === 401){
+            //         console.log('401未授权')
+            //         window.open('/oauth2/authorization/gateway', '_self')
+            //     }
+            //     else
+            //     {
+            //         return res.text()
+            //         userListElement.innerHTML = res.text()
+            //     }
+            //   }
+            // )
+        })
    </script>
 </body>
 </html>

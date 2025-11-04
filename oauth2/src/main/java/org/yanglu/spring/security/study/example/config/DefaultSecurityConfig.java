@@ -11,7 +11,6 @@ import org.springframework.core.annotation.Order;
 import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -63,11 +62,11 @@ public class DefaultSecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/themeleaftest/**").permitAll()
-                        .requestMatchers("/login.html", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/login.html", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                         .requestMatchers("/custom-login", "/login").permitAll()
                         .anyRequest()
                         .authenticated())
-                .csrf(AbstractHttpConfigurer::disable)
+                // .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(
                         // withDefaults()
                         formLogin -> formLogin

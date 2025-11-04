@@ -18,13 +18,10 @@ public class SecurityConfig {
     SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) throws Exception {
         http
                 .authorizeExchange(exchange -> exchange
-                        // .pathMatchers("/front/home.html").permitAll()
-                        // .pathMatchers("/front/index.html").permitAll()
                         .pathMatchers("/", "/*.css", "/*.js", "/*.html", "/favicon.ico").permitAll()
-                        // .pathMatchers("/client1/test").permitAll()
                         .anyExchange().authenticated())
-                .exceptionHandling(exceptionHandling -> exceptionHandling
-						.authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED)))
+                //前后端分离项目，请求后端数据时，不应该返回302，而是应该返回401
+                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .oauth2Login(Customizer.withDefaults())
                 // .csrf(AbstractHttpConfigurer::disable) //不应该禁用，后面要放开
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)

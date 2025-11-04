@@ -1,2 +1,2 @@
 server:
- port: 11002
+ port: ${OAUTH2_FRONT_PORT:11002}
