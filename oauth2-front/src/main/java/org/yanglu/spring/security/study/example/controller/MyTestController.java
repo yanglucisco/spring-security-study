@@ -3,12 +3,11 @@ package org.yanglu.spring.security.study.example.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+
 @Controller
-public class HomeController {
-    @GetMapping("home")
-    public String home() {
-        int a = 10 / 0;
-        System.out.println(a + "");
-        return "home";
+public class MyTestController {
+    @GetMapping("fronttest")
+    public String test() {
+        return "test";
     }
 }

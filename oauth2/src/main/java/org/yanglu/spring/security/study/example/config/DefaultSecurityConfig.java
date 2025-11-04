@@ -64,6 +64,7 @@ public class DefaultSecurityConfig {
                         .requestMatchers("/themeleaftest/**").permitAll()
                         .requestMatchers("/login.html", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                         .requestMatchers("/custom-login", "/login").permitAll()
+                        .requestMatchers("/home").permitAll()
                         .anyRequest()
                         .authenticated())
                 // .csrf(AbstractHttpConfigurer::disable)
@@ -108,7 +109,6 @@ public class DefaultSecurityConfig {
                 })
                 .redirectUris((uris -> {
                     uris.add("http://127.0.0.1:8080/login/oauth2/code/articles-client-oidc");
-                    // uris.add("http://127.0.0.1:8080/web/index.html");
                     uris.add("http://127.0.0.1:8080/authorized");
                 }))
                 .scopes(s -> {
@@ -157,6 +157,7 @@ public class DefaultSecurityConfig {
                     uris.add("http://127.0.0.1:10000/login/oauth2/code/gateway");
                     uris.add("http://127.0.0.1:10000/authorized");
                 }))
+                .postLogoutRedirectUri("http://127.0.0.1:10000")
                 .scopes(s -> {
                     s.add("openid");
                     // s.add("articles.read");

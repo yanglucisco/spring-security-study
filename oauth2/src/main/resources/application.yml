@@ -1,5 +1,8 @@
 server:
   port: 9000
+  servlet:
+    session:
+      tracking-modes: cookie
 
 spring:
   security:
@@ -40,4 +43,19 @@ spring:
         #       - openid
         #       #  - articles.read
         #       #  - server
-      
+logging:
+  level:
+    # 开启Spring Security核心日志
+    '[org.springframework.security]': TRACE
+    # 开启OAuth2核心组件日志
+    '[org.springframework.security.oauth2]': TRACE
+    # 授权服务器特定日志
+    '[org.springframework.security.oauth2.authorization]': TRACE
+    # 授权服务器端点日志
+    '[org.springframework.security.oauth2.authorization.endpoint]': TRACE
+    # 客户端认证相关日志
+    '[org.springframework.security.oauth2.client]': TRACE
+    # 资源服务器相关日志（如同时作为资源服务器）
+    '[org.springframework.security.oauth2.resource]': TRACE
+    # 查看自动配置过程，有助于发现配置问题
+    '[org.springframework.boot.autoconfigure]': TRACE

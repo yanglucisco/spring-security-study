@@ -9,7 +9,7 @@ spring:
         - id: front
           uri: http://127.0.0.1:11002
           predicates:
-           - Path=/,/*.css,/*.js,/*.html,/favicon.ico
+           - Path=/,/*.css,/*.js,/*.html,/favicon.ico, /fronttest
         - id: client
           uri: http://127.0.0.1:8080
           predicates:
@@ -44,6 +44,8 @@ spring:
             client-secret: gatewaysecret
             authorization-grant-type: authorization_code
             redirect-uri: "http://127.0.0.1:10000/login/oauth2/code/{registrationId}"
+            # post_logout_redirect_uri: "http://127.0.0.1:10000"
+            # redirect-uri: "http://127.0.0.1:10000"
             scope: openid
             client-name: gateway
         provider:
