@@ -9,7 +9,7 @@ spring:
         - id: front
           uri: http://127.0.0.1:11002
           predicates:
-           - Path=/,/*.css,/*.js,/*.html,/favicon.ico, /fronttest
+           - Path=/,/*.css,/*.js,/home.html,/index.html,/test.html,/favicon.ico, /fronttest
         - id: client
           uri: http://127.0.0.1:8080
           predicates:

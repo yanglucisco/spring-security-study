@@ -1,37 +1,46 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-   <meta charset="UTF-8">
-   <title>index页面</title>
-   <script>
-    function a(){
-        fetch('http://127.0.0.1:10000/client1/test')
-            .then(res => {
-                console.log(res.status)
-                if(res.status === 401){
-                    console.log('401未授权')
-                    window.open('/oauth2/authorization/gateway', '_self')
+    <meta charset="UTF-8">
+    <title>index页面</title>
+    <script>
+        function getCsrfToken() {
+            const cookieValue = document.cookie
+                .split('; ')
+                .find(row => row.startsWith('XSRF-TOKEN='))
+                ?.split('=')[1];
+            return cookieValue;
+        }
+        function a() {
+            const csrfa = getCsrfToken()
+            fetch('http://127.0.0.1:10000/client1/test')
+                .then(res => {
+                    console.log(res.status)
+                    if (res.status === 401) {
+                        console.log('401未授权')
+                        window.open('/oauth2/authorization/gateway', '_self')
+                    }
+                    else {
+                        console.log()
+                    }
                 }
-                else
-                {
-                    console.log()
-                }
-              }
-            )
-    }
-   </script>
+                )
+        }
+    </script>
 </head>
+
 <body>
-   <h1>我是index.html</h1>
-   <span>点击后，从后台获取数据，如果未登录，则跳转到收取服务器的登录页面</span>
-   <button onclick="a()">测试按钮</button>
-   <h1 id="title">我是title的默认值</h1>
-   <script>
+    <h1>我是index.html</h1>
+    <span>点击后，从后台获取数据，如果未登录，则跳转到收取服务器的登录页面</span>
+    <button onclick="a()">测试按钮1</button>
+    <h1 id="title">我是title的默认值</h1>
+    <script>
         document.addEventListener('DOMContentLoaded', async () => {
             // 获取要插入数据的容器元素
             const userListElement = document.getElementById('title')
             const res = await fetch('http://127.0.0.1:10000/client1/test')
-            if(res.status === 401){
+            if (res.status === 401) {
                 console.log('401未授权')
                 window.open('/oauth2/authorization/gateway', '_self')
                 return
@@ -39,6 +48,7 @@
             const data = await res.text()
             userListElement.innerHTML = data
         })
-   </script>
+    </script>
 </body>
+
 </html>

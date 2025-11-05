@@ -9,9 +9,11 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcClientInitiatedServerLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
+import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -22,7 +24,7 @@ public class SecurityConfig {
                         ReactiveClientRegistrationRepository reactiveClientRegistrationRepository) throws Exception {
                 http.authorizeExchange(exchange -> exchange
                                 .pathMatchers("/", "/*.css", "/*.js", "/*.html", "/favicon.ico",
-                                                "/test", "/login")
+                                                "/test", "/login", "index1.html")
                                 .permitAll()
                                 .anyExchange().authenticated())
                                 // 前后端分离项目，请求后端数据时，不应该返回302，而是应该返回401
@@ -33,8 +35,9 @@ public class SecurityConfig {
                                 .logout(logout -> logout.logoutSuccessHandler(
                                                 // 定义一个自定义的处理器，用于退出操作成功完成的场景
                                                 oidcLogoutSuccessHandler(reactiveClientRegistrationRepository)))
-
-                                .csrf(ServerHttpSecurity.CsrfSpec::disable) // 不应该禁用，后面要放开
+                                                .csrf(csrf -> csrf.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
+                                // .csrf(ServerHttpSecurity.CsrfSpec::disable) // 不应该禁用，后面要放开
+                                // csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()
                                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                                 .oauth2Client(withDefaults());
                 return http.build();

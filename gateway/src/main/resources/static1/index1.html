@@ -10,6 +10,9 @@
 <body>
 <button onclick="test()">测试</button>
 <button onclick="test1()">测试1</button>
+<form method="post" action="test">
+        <input type="submit" value="退出登录"/>
+</form>
 <script>
     function test(){
         location.href = 'http://auth-server:9000/oauth2/authorize?response_type=code&client_id=pkce-client&scope=openid pkce&redirect_uri=http://auth-gateway:10000/index.html&code_challenge_method=S256&code_challenge=hQqHvGROSi0bvuXVAUXnSj1ZN1p1pDTpnKy5HZvvAso';
