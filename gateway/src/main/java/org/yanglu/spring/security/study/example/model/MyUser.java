@@ -4,8 +4,7 @@ import java.util.List;
 
 public record MyUser(
         String username,
-        String firstName,
-        String lastName,
+        String authroies,
         List<String> roles) {
 
 }
