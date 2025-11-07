@@ -37,12 +37,7 @@ public class DefaultSecurityConfig {
     @SuppressWarnings("unused")
     SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-        http
-                // .exceptionHandling(exceptions -> exceptions
-                // .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
-                // )
-                // .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
-                .getConfigurer(OAuth2AuthorizationServerConfigurer.class)
+        http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(withDefaults()) // Enable OpenID Connect 1.0
         ;
         http
@@ -67,9 +62,7 @@ public class DefaultSecurityConfig {
                         .requestMatchers("/home").permitAll()
                         .anyRequest()
                         .authenticated())
-                // .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(
-                        // withDefaults()
                         formLogin -> formLogin
                                 // 指定自定义登录页的URL
                                 .loginPage("/custom-login")
