@@ -10,14 +10,24 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcClientInitiatedServerLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
+import org.springframework.web.server.WebFilter;
+
+import reactor.core.publisher.Mono;
 
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
+
+//     private final CsrfCookieWebFilter csrfCookieWebFilter;
+
+//     SecurityConfig(CsrfCookieWebFilter csrfCookieWebFilter) {
+//         this.csrfCookieWebFilter = csrfCookieWebFilter;
+//     }
         @Bean
         @SuppressWarnings("unused")
         SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http,
@@ -35,10 +45,14 @@ public class SecurityConfig {
                                 .logout(logout -> logout.logoutSuccessHandler(
                                                 // 定义一个自定义的处理器，用于退出操作成功完成的场景
                                                 oidcLogoutSuccessHandler(reactiveClientRegistrationRepository)))
-                                                .csrf(csrf -> csrf.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
+                                .csrf(csrf -> csrf.csrfTokenRepository(
+                                                CookieServerCsrfTokenRepository.withHttpOnlyFalse()
+                                                )
+                                                .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
+                                                )
                                 // .csrf(ServerHttpSecurity.CsrfSpec::disable) // 不应该禁用，后面要放开
                                 // csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()
-                                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+                                // .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                                 .oauth2Client(withDefaults());
                 return http.build();
         }
@@ -51,5 +65,22 @@ public class SecurityConfig {
                                 .setPostLogoutRedirectUri("{baseUrl}");
                 // 从OIDC提供者退出之后，将会重定向至应用的基础URL，该URL是由Spring动态计算得到的（本地的话，将会是http://localhost:9000/）
                 return oidcLogoutSuccessHandler;
+        }
+
+        // @Bean
+        WebFilter csrfWebFilter() {
+                // ←--- 仅用于订阅CsrfToken反应式流的过滤器，并确保它的值能够被正常提取
+                return (exchange, chain) -> {
+                        exchange.getResponse().beforeCommit(() -> Mono.defer(() -> {
+                                var name = CsrfToken.class.getName();
+                                Mono<CsrfToken> csrfToken = exchange.getAttribute(name);
+                                if(csrfToken != null){
+                                        return csrfToken.then();
+                                }
+                                return Mono.empty();
+                                // return csrfToken != null ? csrfToken.then() : Mono.empty();
+                        }));
+                        return chain.filter(exchange);
+                };
         }
 }
