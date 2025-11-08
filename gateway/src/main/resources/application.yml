@@ -10,6 +10,13 @@ spring:
           uri: http://127.0.0.1:11002
           predicates:
            - Path=/,/*.css,/*.js,/home.html,/index.html,/test.html,/favicon.ico, /fronttest
+        - id: articles
+          uri: http://127.0.0.1:8090
+          predicates:
+           - Path=/articles/**
+          filters:
+           - StripPrefix=1        # 转发前去掉第一层路径 /client
+           - TokenRelay
         - id: client
           uri: http://127.0.0.1:8080
           predicates:
@@ -44,9 +51,18 @@ spring:
             client-secret: gatewaysecret
             authorization-grant-type: authorization_code
             redirect-uri: "http://127.0.0.1:10000/login/oauth2/code/{registrationId}"
-            # post_logout_redirect_uri: "http://127.0.0.1:10000"
-            # redirect-uri: "http://127.0.0.1:10000"
-            scope: openid
+            scope: 
+             - openid
+             - aritcles.read
+            client-name: gateway
+          gateway1:
+            provider: spring
+            client-id: gateway
+            client-secret: gatewaysecret
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:10000/login/oauth2/code/{registrationId}"
+            scope: 
+             - aritcles.read
             client-name: gateway
         provider:
           spring:

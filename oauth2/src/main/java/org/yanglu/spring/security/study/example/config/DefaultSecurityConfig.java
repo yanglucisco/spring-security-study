@@ -174,7 +174,7 @@ public class DefaultSecurityConfig {
                 .authorizationGrantTypes(gts -> {
                     gts.add(AuthorizationGrantType.AUTHORIZATION_CODE);
                     gts.add(AuthorizationGrantType.REFRESH_TOKEN);
-                    // gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
+                    gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
                 })
                 .redirectUris((uris -> {
                     uris.add("http://127.0.0.1:10000/login/oauth2/code/gateway");
@@ -183,7 +183,7 @@ public class DefaultSecurityConfig {
                 .postLogoutRedirectUri("http://127.0.0.1:10000")
                 .scopes(s -> {
                     s.add("openid");
-                    // s.add("articles.read");
+                    s.add("aritcles.read");
                     // s.add("server");
                 })
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())

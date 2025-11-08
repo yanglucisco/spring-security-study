@@ -17,7 +17,7 @@ public class ResourceServerConfig {
        http.securityMatcher("/articles/**")
                .authorizeHttpRequests(authorize ->
                        authorize.anyRequest()
-                       .hasAuthority("SCOPE_articles.read"))
+                       .hasAuthority("SCOPE_aritcles.read"))
                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 
         // http.authorizeHttpRequests(auth -> auth
