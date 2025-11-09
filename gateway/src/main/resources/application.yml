@@ -17,6 +17,7 @@ spring:
           filters:
            - StripPrefix=1        # 转发前去掉第一层路径 /client
            - name: AddStaticToken # 使用自定义过滤器添加指定令牌
+          #  - name: AddStaticTokenGatewayFilterFactory
         - id: client
           uri: http://127.0.0.1:8080
           predicates:

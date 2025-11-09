@@ -1,5 +1,7 @@
 package org.yanglu.spring.security.study.example;
 
+import java.time.LocalDateTime;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,7 +14,7 @@ public class ArticlesController {
     @GetMapping("/articles")
     public String[] getArticles() {
         log.info("获取articles... ...");
-        return new String[] { "Article 1", "Article 2", "Article 3", "4", "5" };
+        return new String[] { "Article 1", "Article 2", "Article 3", "4", "5", LocalDateTime.now().toString() };
     }
     @GetMapping("/test")
     public String test() {
