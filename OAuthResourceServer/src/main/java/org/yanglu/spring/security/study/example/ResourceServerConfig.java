@@ -12,24 +12,23 @@ import org.springframework.security.web.SecurityFilterChain;
 public class ResourceServerConfig {
 
     @Bean
-    @SuppressWarnings("unused")
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-       http.securityMatcher("/articles/**")
-               .authorizeHttpRequests(authorize ->
-                       authorize.anyRequest()
-                       .hasAuthority("SCOPE_aritcles.read"))
-               .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+    //    http.securityMatcher("/articles/**")
+    //            .authorizeHttpRequests(authorize ->
+    //                    authorize.anyRequest()
+    //                    .hasAuthority("SCOPE_aritcles.read"))
+    //            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 
-        // http.authorizeHttpRequests(auth -> auth
-        //         .requestMatchers("/articles/**").hasAuthority("SCOPE_articles.read")
-        //         .requestMatchers("/test/**").hasAuthority("SCOPE_server")
-        //                 .requestMatchers("/test1/**").hasAuthority("SCOPE_server")
-        //                 .requestMatchers("/test3/**").hasAuthority("SCOPE_browser")
-        //                 .requestMatchers("/pkce/**").hasAuthority("SCOPE_pkce")
-        //         .anyRequest().authenticated()
-        // )
-        //         .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
-        // ;
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/articles/**").hasAuthority("SCOPE_articles.read")
+                .requestMatchers("/test/**").hasAuthority("SCOPE_server")
+                        .requestMatchers("/test1/**").hasAuthority("SCOPE_server")
+                        .requestMatchers("/test3/**").hasAuthority("SCOPE_browser")
+                        .requestMatchers("/pkce/**").hasAuthority("SCOPE_pkce")
+                .anyRequest().authenticated()
+        )
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+        ;
         return http.build();
     }
 }

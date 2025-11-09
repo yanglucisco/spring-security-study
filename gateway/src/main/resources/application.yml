@@ -16,7 +16,7 @@ spring:
            - Path=/articles/**
           filters:
            - StripPrefix=1        # 转发前去掉第一层路径 /client
-           - TokenRelay
+           - name: AddStaticToken # 使用自定义过滤器添加指定令牌
         - id: client
           uri: http://127.0.0.1:8080
           predicates:
@@ -53,16 +53,15 @@ spring:
             redirect-uri: "http://127.0.0.1:10000/login/oauth2/code/{registrationId}"
             scope: 
              - openid
-             - aritcles.read
             client-name: gateway
           gateway1:
             provider: spring
             client-id: gateway
             client-secret: gatewaysecret
-            authorization-grant-type: authorization_code
+            authorization-grant-type: client_credentials
             redirect-uri: "http://127.0.0.1:10000/login/oauth2/code/{registrationId}"
             scope: 
-             - aritcles.read
+             - articles.read
             client-name: gateway
         provider:
           spring:

@@ -22,7 +22,6 @@ import org.yanglu.spring.security.study.example.filters.CustomFilter;
 @Configuration
 public class MyConfig {
     @Bean
-    @SuppressWarnings("unused")
     WebClient webClient(OAuth2AuthorizedClientManager authorizedClientManager) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
                 new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
@@ -31,7 +30,6 @@ public class MyConfig {
                 .build();
     }
     @Bean
-    @SuppressWarnings("unused")
     OAuth2AuthorizedClientManager authorizedClientManager(
             ClientRegistrationRepository clientRegistrationRepository,
             OAuth2AuthorizedClientRepository authorizedClientRepository) {
@@ -50,7 +48,6 @@ public class MyConfig {
     }
 
     @Bean
-    @SuppressWarnings("unused")
     CustomFilter customFilter(){
         return new CustomFilter(myTest());
     }

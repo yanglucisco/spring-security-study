@@ -22,7 +22,6 @@ public class SecurityConfig {
         private CustomFilter customFilter; // 注入自定义的过滤器
 
         @Bean
-        @SuppressWarnings("unused")
         SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
                                 .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)

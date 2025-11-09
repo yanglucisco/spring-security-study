@@ -137,11 +137,32 @@ public class DefaultSecurityConfig {
                 .scopes(s -> {
                     s.add("openid");
                     s.add("articles.read");
-                    s.add("server");
+                    // s.add("server");
                 })
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .tokenSettings(TokenSettings.builder().refreshTokenTimeToLive(Duration.ofMinutes(3)).build())
                 .build();
+        // RegisteredClient articlesClientRead = RegisteredClient.withId(UUID.randomUUID().toString())
+        //         .clientId("articles-client-read")
+        //         .clientSecret("{noop}readsecret")
+        //         .clientName("Articles Client Read")
+        //         .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+        //         .authorizationGrantTypes(gts -> {
+        //             gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
+        //             gts.add(AuthorizationGrantType.REFRESH_TOKEN);
+        //             gts.add(AuthorizationGrantType.AUTHORIZATION_CODE);
+        //         })
+        //         .redirectUris((uris -> {
+        //             uris.add("http://127.0.0.1:8080/login/oauth2/code/articles-client-read");
+        //             uris.add("http://127.0.0.1:8080/authorized");
+        //         }))
+        //         .postLogoutRedirectUri("http://127.0.0.1:10000")
+        //         .scopes(s -> {
+        //             s.add("openid");
+        //             s.add("articles.read");
+        //         })
+        //         .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+        //         .build();
 
         RegisteredClient articlesClient1 = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("articles-client1")
@@ -183,7 +204,7 @@ public class DefaultSecurityConfig {
                 .postLogoutRedirectUri("http://127.0.0.1:10000")
                 .scopes(s -> {
                     s.add("openid");
-                    s.add("aritcles.read");
+                    s.add("articles.read");
                     // s.add("server");
                 })
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
@@ -194,6 +215,7 @@ public class DefaultSecurityConfig {
         clients.add(articlesClient);
         clients.add(articlesClient1);
         clients.add(gateway);
+        // clients.add(articlesClientRead);
 
         return new InMemoryRegisteredClientRepository(clients);
     }
