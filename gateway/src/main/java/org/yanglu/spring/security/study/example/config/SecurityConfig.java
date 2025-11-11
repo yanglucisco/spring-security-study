@@ -17,18 +17,12 @@ import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcCli
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
-import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.server.WebFilter;
-
-import reactor.core.publisher.Mono;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -39,6 +33,7 @@ public class SecurityConfig {
 //     private ReactiveClientRegistrationRepository clientRegistrationRepository;
 
         @Bean
+        @SuppressWarnings("unused")
     WebClient webClient(ReactiveOAuth2AuthorizedClientManager authorizedClientManager) {
          // 创建 OAuth2 过滤器功能函数，这是自动携带令牌的关键
         ServerOAuth2AuthorizedClientExchangeFilterFunction oauth2Filter =
@@ -88,10 +83,11 @@ public class SecurityConfig {
                                                 .authenticationEntryPoint(new HttpStatusServerEntryPoint(
                                                                 HttpStatus.UNAUTHORIZED)))
                                 .oauth2Login(
-                                     withDefaults()   
-                                // c -> 
-                                // c.authenticationSuccessHandler(successHandler)
-                                // .authorizationRequestResolver(customResolver) // 注册自定义解析器
+                                //      withDefaults()   
+                                c -> 
+                                c.authorizationRequestResolver(customResolver) // 注册自定义解析器
+                                .authenticationSuccessHandler(successHandler)
+                                
                                 )
                                 .logout(logout -> logout.logoutSuccessHandler(
                                                 // 定义一个自定义的处理器，用于退出操作成功完成的场景

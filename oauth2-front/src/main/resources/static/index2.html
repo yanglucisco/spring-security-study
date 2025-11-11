@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>index页面</title>
+    <title>index222222页面</title>
     <script>
         function getCsrfToken() {
             const cookieValue = document.cookie
@@ -45,7 +45,7 @@
             value="" />
         <input type="submit" value="退出登录" />
     </form>
-    <h1>我是index.html</h1>
+    <h1>我是index22222222222222222.html</h1>
     <!-- <span>点击后，从后台获取数据，如果未登录，则跳转到收取服务器的登录页面</span> -->
     <!-- <button onclick="postTest()">退出登录csrf</button> -->
     <h1 id="title">我是title的默认值</h1>
@@ -57,7 +57,7 @@
             const res = await fetch('http://127.0.0.1:10000/resource1/test')
             if (res.status === 401) {
                 console.log('401未授权')
-                window.open('/oauth2/authorization/gateway?redirect_uri=http://127.0.0.1:10000/index.html', '_self')
+                window.open('/oauth2/authorization/gateway?redirect_uri=http://127.0.0.1:10000/index2.html', '_self')
                 return
             }
             const data = await res.text()
