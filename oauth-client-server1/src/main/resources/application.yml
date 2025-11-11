@@ -1,19 +1,19 @@
 server:
   port: 8081
 
-# spring:
-#   security:
-#     oauth2:
-#       client:
-#         registration:
-#           articles-client1-oidc:
-#             provider: spring
-#             client-id: articles-client1
-#             client-secret: secret1
-#             authorization-grant-type: authorization_code
-#             redirect-uri: "http://127.0.0.1:8081/login/oauth2/code/{registrationId}"
-#             scope: openid
-#             client-name: articles-client1-oidc
-#         provider:
-#           spring:
-#             issuer-uri: http://auth-server:9000
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          articles-client1-oidc:
+            provider: spring
+            client-id: articles-client1
+            client-secret: secret1
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:8081/login/oauth2/code/{registrationId}"
+            scope: openid
+            client-name: articles-client1-oidc
+        provider:
+          spring:
+            issuer-uri: http://auth-server:9000

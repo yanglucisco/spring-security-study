@@ -132,7 +132,7 @@ public class DefaultSecurityConfig {
                 })
                 .redirectUris((uris -> {
                     uris.add("http://127.0.0.1:8080/login/oauth2/code/articles-client-oidc");
-                    uris.add("http://127.0.0.1:8080/authorized");
+                    
                 }))
                 .scopes(s -> {
                     s.add("openid");
@@ -176,7 +176,6 @@ public class DefaultSecurityConfig {
                 })
                 .redirectUris((uris -> {
                     uris.add("http://127.0.0.1:8081/login/oauth2/code/articles-client1-oidc");
-                    uris.add("http://127.0.0.1:8081/authorized");
                 }))
                 .scopes(s -> {
                     s.add("openid");
@@ -199,7 +198,6 @@ public class DefaultSecurityConfig {
                 })
                 .redirectUris((uris -> {
                     uris.add("http://127.0.0.1:10000/login/oauth2/code/gateway");
-                    uris.add("http://127.0.0.1:10000/authorized");
                 }))
                 .postLogoutRedirectUri("http://127.0.0.1:10000")
                 .scopes(s -> {

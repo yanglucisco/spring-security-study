@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import static org.springframework.security.config.Customizer.withDefaults;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
@@ -31,6 +33,10 @@ import reactor.core.publisher.Mono;
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
+        @Autowired
+    private RedirectToOriginalUrlAuthenticationSuccessHandler successHandler;
+//     @Autowired
+//     private ReactiveClientRegistrationRepository clientRegistrationRepository;
 
         @Bean
     WebClient webClient(ReactiveOAuth2AuthorizedClientManager authorizedClientManager) {
@@ -69,25 +75,30 @@ public class SecurityConfig {
         @SuppressWarnings("unused")
         SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http,
                         ReactiveClientRegistrationRepository reactiveClientRegistrationRepository) throws Exception {
+                                // 实例化自定义解析器
+        CustomAuthorizationRequestResolver customResolver = 
+            new CustomAuthorizationRequestResolver(reactiveClientRegistrationRepository);
                 http.authorizeExchange(exchange -> exchange
                                 .pathMatchers("/", "/*.css", "/*.js", "/*.html", "/favicon.ico",
-                                                "/test", "/login", "index1.html")
+                                                "/test123123", "/login")
                                 .permitAll()
                                 .anyExchange().authenticated())
                                 // 前后端分离项目，请求后端数据时，不应该返回302，而是应该返回401
                                 .exceptionHandling(exceptionHandling -> exceptionHandling
                                                 .authenticationEntryPoint(new HttpStatusServerEntryPoint(
                                                                 HttpStatus.UNAUTHORIZED)))
-                                .oauth2Login(Customizer.withDefaults())
+                                .oauth2Login(
+                                     withDefaults()   
+                                // c -> 
+                                // c.authenticationSuccessHandler(successHandler)
+                                // .authorizationRequestResolver(customResolver) // 注册自定义解析器
+                                )
                                 .logout(logout -> logout.logoutSuccessHandler(
                                                 // 定义一个自定义的处理器，用于退出操作成功完成的场景
                                                 oidcLogoutSuccessHandler(reactiveClientRegistrationRepository)))
                                 .csrf(csrf -> csrf.csrfTokenRepository(
                                                 CookieServerCsrfTokenRepository.withHttpOnlyFalse())
                                                 .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler()))
-                                // .csrf(ServerHttpSecurity.CsrfSpec::disable) // 不应该禁用，后面要放开
-                                // csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()
-                                // .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                                 .oauth2Client(withDefaults());
                 return http.build();
         }
@@ -100,22 +111,5 @@ public class SecurityConfig {
                                 .setPostLogoutRedirectUri("{baseUrl}");
                 // 从OIDC提供者退出之后，将会重定向至应用的基础URL，该URL是由Spring动态计算得到的（本地的话，将会是http://localhost:9000/）
                 return oidcLogoutSuccessHandler;
-        }
-
-        // @Bean
-        WebFilter csrfWebFilter() {
-                // ←--- 仅用于订阅CsrfToken反应式流的过滤器，并确保它的值能够被正常提取
-                return (exchange, chain) -> {
-                        exchange.getResponse().beforeCommit(() -> Mono.defer(() -> {
-                                var name = CsrfToken.class.getName();
-                                Mono<CsrfToken> csrfToken = exchange.getAttribute(name);
-                                if (csrfToken != null) {
-                                        return csrfToken.then();
-                                }
-                                return Mono.empty();
-                                // return csrfToken != null ? csrfToken.then() : Mono.empty();
-                        }));
-                        return chain.filter(exchange);
-                };
         }
 }

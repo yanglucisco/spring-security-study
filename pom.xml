@@ -22,6 +22,7 @@
     <module>oauth-client-server1</module>
     <module>thymeleaf-study</module>
     <module>oauth2-front</module>
+    <module>resource-server1</module>
   </modules>
 
   <properties>

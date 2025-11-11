@@ -26,9 +26,9 @@ public class MyTest {
 	// public MyTest(ReactiveOAuth2AuthorizedClientManager authorizedClientManager) {
 	// 	this.webClient = webClient;
 	// }
-    @GetMapping("test")
+    @GetMapping("testred")
     public String test() {
-        return "test";
+        return "testredtestredtestred";
     }
     @GetMapping("test1")
     public String test1() {

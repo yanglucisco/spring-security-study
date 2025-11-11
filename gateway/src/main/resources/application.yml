@@ -9,7 +9,7 @@ spring:
         - id: front
           uri: http://127.0.0.1:11002
           predicates:
-           - Path=/,/*.css,/*.js,/home.html,/index.html,/test.html,/favicon.ico, /fronttest
+           - Path=/,/*.css,/*.js,/home.html,/index.html,/test.html,/favicon.ico, /fronttest,/index1.html
         - id: articles
           uri: http://127.0.0.1:8090
           predicates:
@@ -17,7 +17,6 @@ spring:
           filters:
            - StripPrefix=1        # 转发前去掉第一层路径 /client
            - name: AddStaticToken # 使用自定义过滤器添加指定令牌
-          #  - name: AddStaticTokenGatewayFilterFactory
         - id: client
           uri: http://127.0.0.1:8080
           predicates:
@@ -30,6 +29,7 @@ spring:
            - Path=/client1/**
           filters:
            - StripPrefix=1        # 转发前去掉第一层路径 /client1
+           - name: AddStaticToken # 使用自定义过滤器添加指定令牌
         - id: test_route
           uri: http://auth-server:9000
           predicates:
@@ -42,6 +42,12 @@ spring:
           uri: http://auth-server:9000
           predicates:
            - Path=/test/**
+        - id: resource1
+          uri: http://127.0.0.1:8091
+          predicates:
+           - Path=/resource1/**
+          filters:
+           - name: AddStaticToken # 使用自定义过滤器添加指定令牌
   security:
     oauth2:
       client:
