@@ -9,17 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import static org.springframework.security.config.Customizer.withDefaults;
-
 import org.springframework.security.config.Customizer;
+import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
@@ -31,7 +24,6 @@ import org.springframework.security.oauth2.server.authorization.settings.ClientS
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.yanglu.spring.security.study.example.config.security.CustomUserDetailsService;
@@ -142,27 +134,6 @@ public class DefaultSecurityConfig {
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .tokenSettings(TokenSettings.builder().refreshTokenTimeToLive(Duration.ofMinutes(3)).build())
                 .build();
-        // RegisteredClient articlesClientRead = RegisteredClient.withId(UUID.randomUUID().toString())
-        //         .clientId("articles-client-read")
-        //         .clientSecret("{noop}readsecret")
-        //         .clientName("Articles Client Read")
-        //         .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-        //         .authorizationGrantTypes(gts -> {
-        //             gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
-        //             gts.add(AuthorizationGrantType.REFRESH_TOKEN);
-        //             gts.add(AuthorizationGrantType.AUTHORIZATION_CODE);
-        //         })
-        //         .redirectUris((uris -> {
-        //             uris.add("http://127.0.0.1:8080/login/oauth2/code/articles-client-read");
-        //             uris.add("http://127.0.0.1:8080/authorized");
-        //         }))
-        //         .postLogoutRedirectUri("http://127.0.0.1:10000")
-        //         .scopes(s -> {
-        //             s.add("openid");
-        //             s.add("articles.read");
-        //         })
-        //         .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
-        //         .build();
 
         RegisteredClient articlesClient1 = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("articles-client1")
@@ -206,7 +177,7 @@ public class DefaultSecurityConfig {
                     // s.add("server");
                 })
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
-                // .tokenSettings(TokenSettings.builder().refreshTokenTimeToLive(Duration.ofMinutes(3)).build())
+                .tokenSettings(TokenSettings.builder().refreshTokenTimeToLive(Duration.ofHours(5)).build())
                 .build();
 
         List<RegisteredClient> clients = new ArrayList<>();
