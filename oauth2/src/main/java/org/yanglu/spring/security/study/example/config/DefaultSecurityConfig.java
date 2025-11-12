@@ -177,9 +177,9 @@ public class DefaultSecurityConfig {
                     // s.add("server");
                 })
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
-                .tokenSettings(TokenSettings.builder().refreshTokenTimeToLive(Duration.ofHours(5)).build())
+                .tokenSettings(TokenSettings.builder().refreshTokenTimeToLive(Duration.ofHours(5))
+                                                      .accessTokenTimeToLive(Duration.ofHours(5)).build())
                 .build();
-
         List<RegisteredClient> clients = new ArrayList<>();
         clients.add(articlesClient);
         clients.add(articlesClient1);

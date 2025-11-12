@@ -1,0 +1,79 @@
+services:
+  # Spring Boot 应用服务
+  oauth-app:
+    build: ./oauth2  # 使用Dockerfile构建镜像的路径
+    container_name: oauth2-app
+    # 如果不想构建，可以直接使用已有的镜像，例如：
+    # image: your-dockerhub-username/your-springboot-app:latest
+    expose:
+      - "9000"  # 暴露容器内部的8080端口给其他服务访问
+    ports:
+      - "9000:9000" # 端口映射：宿主机端口:容器内端口
+    environment:
+      - SPRING_PROFILES_ACTIVE=mysql # 可选：设置Spring Profile
+      - DB_HOST=mysql-db
+      - DB_PORT=3306
+      - DB_NAME=my_test
+      - DB_USER=redisstudy
+      - DB_PASSWORD=redisstudy
+    # 如果应用依赖数据库，可以在这里定义，并使用depends_on
+    depends_on:
+      - mysql-db
+    networks:
+      - app-network # 将服务连接到自定义网络，便于其他容器访问
+
+  mysql-db: # 服务名称，其他容器可通过此名称连接到数据库
+    image: gcr.io/ml-pipeline/mysql:8.0.26 # 建议指定一个稳定的版本号
+    container_name: mysql-db # 指定容器的名称
+    restart: unless-stopped # 容器意外退出时自动重启（除非手动停止）
+    ports:
+      - "3308:3306" # 端口映射：宿主机端口:容器内端口
+    environment:
+      MYSQL_ROOT_PASSWORD: Htht123.com
+      MYSQL_DATABASE: my_test
+      MYSQL_USER: redisstudy
+      MYSQL_PASSWORD: redisstudy
+      TZ: Asia/Shanghai # 设置容器时区[2](@ref)
+    volumes:
+      # 数据持久化：将容器内的数据目录映射到宿主机
+      - "C:/mysql_study/mysql-redis-study/data:/var/lib/mysql" # 确保数据不随容器删除而丢失[2](@ref)[4](@ref)
+      # 挂载自定义配置文件目录
+      - "C:/mysql_study/mysql-redis-study/config/conf.d:/etc/mysql/conf.d" # 可放置自定义配置如 my.cnf[2](@ref)[6](@ref)
+      # 挂载初始化SQL脚本目录：目录下的.sql文件会在数据库首次初始化时自动执行
+      - "./mysql/initdb.d:/docker-entrypoint-initdb.d" # [4](@ref)[6](@ref)
+    healthcheck: # 健康检查，确保数据库完全启动后再连接应用[2](@ref)[6](@ref)
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pHtht123.com"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - app-network # 将服务连接到自定义网络，便于其他容器访问
+
+  # # Nginx 反向代理服务
+  nginx:
+    image: nginx:1.23.3-alpine # nginx:stable-alpine
+    container_name: nginx-proxy-1.23.3
+    ports:
+      - "80:80"  # 将主机的80端口映射到容器的80端口
+    volumes:
+    #"D:\\study\\nginx1\\html:/usr/share/nginx/html",
+		#	"D:\\study\\nginx1\\config\\nginx.conf:/etc/nginx/nginx.conf",
+		#	"D:\\study\\nginx1\\logs:/var/log/nginx"
+      - "D:/study/nginx-redis-study/html:/usr/share/nginx/html"
+      - "D:/study/nginx-redis-study/config/nginx.conf:/etc/nginx/nginx.conf"
+      - "D:/study/nginx-redis-study/logs:/var/log/nginx"
+      # 如果需要SSL，可以挂载证书目录
+      # - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+     - app  # 确保Spring Boot应用先启动
+    # 使用links确保nginx可以通过服务名"app"访问到后端应用[1](@ref)[2](@ref)
+    links:
+     - app
+    networks:
+      - app-network # 将服务连接到自定义网络，便于其他容器访问
+
+# 定义自定义网络，容器间可通过服务名（如'mysql-db'）通信，而非IP地址
+networks:
+  app-network:
+    driver: bridge
