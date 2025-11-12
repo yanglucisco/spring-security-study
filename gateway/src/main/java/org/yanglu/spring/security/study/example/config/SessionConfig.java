@@ -9,9 +9,9 @@ import org.springframework.security.jackson2.SecurityJackson2Modules;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-// @Configuration
+@Configuration
 public class SessionConfig 
-// implements BeanClassLoaderAware 
+ implements BeanClassLoaderAware 
 {
 
 	private ClassLoader loader;
@@ -22,7 +22,7 @@ public class SessionConfig
 	 * the default {@link RedisSerializer} used by Spring Session.
 	 */
 	@SuppressWarnings("null")
-    // @Bean
+    @Bean
 	public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
         
 		return new GenericJackson2JsonRedisSerializer(objectMapper());
@@ -44,7 +44,7 @@ public class SessionConfig
 	 * org.springframework.beans.factory.BeanClassLoaderAware#setBeanClassLoader(java.lang
 	 * .ClassLoader)
 	 */
-	// @Override
+	@Override
 	public void setBeanClassLoader(ClassLoader classLoader) {
 		this.loader = classLoader;
 	}
