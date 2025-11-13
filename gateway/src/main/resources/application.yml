@@ -42,12 +42,18 @@ spring:
           uri: http://auth-server:9000
           predicates:
            - Path=/test/**
-        - id: resource1
+        - id: resourcerole
           uri: http://127.0.0.1:8091
           predicates:
-           - Path=/resource1/**
+           - Path=/resourcerole/**
           filters:
            - name: AddStaticTokenRole # 使用自定义过滤器添加指定令牌
+        - id: resourcescope
+          uri: http://127.0.0.1:8091
+          predicates:
+           - Path=/resourcescope/**
+          filters:
+           - name: AddStaticTokenScope # 使用自定义过滤器添加指定令牌
   security:
     oauth2:
       client:
@@ -61,7 +67,7 @@ spring:
             scope: 
              - openid
             client-name: gateway
-          gateway1:
+          gateway-scope:
             provider: spring
             client-id: gateway
             client-secret: gatewaysecret

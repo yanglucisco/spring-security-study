@@ -35,7 +35,7 @@ public class AddStaticTokenScopeGatewayFilterFactory extends AbstractGatewayFilt
             return authenticationMono.flatMap(authentication -> {
                 if (authentication != null && authentication.isAuthenticated()) {
                     OAuth2AuthorizeRequest authorizeRequest = OAuth2AuthorizeRequest
-                                .withClientRegistrationId("gateway1")
+                                .withClientRegistrationId("gateway-scope")
                                 .principal(authentication)
                                 .attribute(ServerWebExchange.class.getName(), exchange)
                                 .build();
@@ -43,6 +43,7 @@ public class AddStaticTokenScopeGatewayFilterFactory extends AbstractGatewayFilt
                     Mono<ServerHttpRequest> req = this.authorizedClientManager.authorize(authorizeRequest)
                                 .map(OAuth2AuthorizedClient::getAccessToken)
                                 .map((f) -> {
+                                    System.out.println("gatewayScope Bearer: " + f.getTokenValue());
                                     return f.getTokenValue();
                                 })
                                 .map( token -> {

@@ -26,26 +26,45 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
 
     private Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
         // 1. 尝试从常见的声明中提取角色信息
-        List<String> roles = jwt.getClaimAsStringList("roles");
+        
         
         // 2. 如果roles声明为空，尝试其他常见声明名称
-        if (roles == null || roles.isEmpty()) {
-            roles = jwt.getClaimAsStringList("authorities");
-        }
-        if (roles == null || roles.isEmpty()) {
-            roles = jwt.getClaimAsStringList("scope");
-        }
-        
-        // 3. 将角色字符串转换为GrantedAuthority对象
-        if (roles != null && !roles.isEmpty()) {
-            return roles.stream()
+        // if (roles == null || roles.isEmpty()) {
+        //     roles = jwt.getClaimAsStringList("authorities");
+        // }
+        List<String> scopesAndRoles = jwt.getClaimAsStringList("scope");
+        List<String> roles = jwt.getClaimAsStringList("roles");
+        scopesAndRoles.addAll(roles);
+        if (!scopesAndRoles.isEmpty()) {
+            return scopesAndRoles.stream()
                     // 确保角色有ROLE_前缀（hasRole()方法要求）
-                    .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)
+                    .map(item -> item.startsWith("ROLE_") ? item : "SCOPE_" + item)
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
         }
         
+        // 3. 将角色字符串转换为GrantedAuthority对象
+        
+        // List<GrantedAuthority> r = Collections.emptyList();
+        
+        // if (roles != null && !roles.isEmpty()) {
+        //     return roles.stream()
+        //             // 确保角色有ROLE_前缀（hasRole()方法要求）
+        //             .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)
+        //             .map(SimpleGrantedAuthority::new)
+        //             .collect(Collectors.toList());
+        // }
         return Collections.emptyList();
+        // List<String> scopes = jwt.getClaimAsStringList("scope");
+        // if(scopes != null && !scopes.isEmpty())
+        // {
+        //     for (String scope : scopes) {
+        //         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + scope);
+        //         r.add(grantedAuthority);
+        //     }
+        //     // r.addAll(scopes.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+        // }
+        // return r;
     }
 }
 

@@ -75,7 +75,7 @@ public class SecurityConfig {
             new CustomAuthorizationRequestResolver(reactiveClientRegistrationRepository);
                 http.authorizeExchange(exchange -> exchange
                                 .pathMatchers("/", "/*.css", "/*.js", "/*.html", "/favicon.ico",
-                                                "/test123123", "/login")
+                                                "/test123123", "/login", "/resourcerole123/roleadmin")
                                 .permitAll()
                                 .anyExchange().authenticated())
                                 // 前后端分离项目，请求后端数据时，不应该返回302，而是应该返回401

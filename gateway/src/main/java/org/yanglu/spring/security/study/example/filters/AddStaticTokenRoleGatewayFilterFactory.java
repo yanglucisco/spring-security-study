@@ -45,7 +45,7 @@ public class AddStaticTokenRoleGatewayFilterFactory extends AbstractGatewayFilte
                     Mono<ServerHttpRequest> req = this.authorizedClientManager.authorize(authorizeRequest)
                                 .map(OAuth2AuthorizedClient::getAccessToken)
                                 .map((f) -> {
-                                    System.out.println("gateway1 Bearer: " + f.getTokenValue());
+                                    System.out.println("gatewayRole Bearer: " + f.getTokenValue());
                                     return f.getTokenValue();
                                 })
                                 .map( token -> {

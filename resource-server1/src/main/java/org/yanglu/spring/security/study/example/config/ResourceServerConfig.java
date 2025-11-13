@@ -6,6 +6,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -22,11 +24,15 @@ public class ResourceServerConfig {
         http
         .csrf(csrf -> csrf.disable())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt->jwt.jwtAuthenticationConverter(customJwtAuthenticationConverter)))
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(
+                    // Customizer.withDefaults()
+                    jwt->jwt.jwtAuthenticationConverter(customJwtAuthenticationConverter)
+                    ))
         .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/resource1/testscope").hasAuthority("SCOPE_articles.read")
-                .requestMatchers("/resource1/testroleadmin").hasRole("admin")
-                .requestMatchers("/resource1/testrolenormal").hasRole("normal")
+                .requestMatchers("/resourcerole/roleadmin").hasRole("admin")
+                .requestMatchers("/resourcerole/rolenormal").hasRole("normal")
+                .requestMatchers("/resourcescope/**").hasAuthority("SCOPE_articles.read")
+                
                 .anyRequest().authenticated()
         )
         ;
