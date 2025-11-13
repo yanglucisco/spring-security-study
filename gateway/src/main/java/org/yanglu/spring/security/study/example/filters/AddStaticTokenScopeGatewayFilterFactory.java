@@ -23,7 +23,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
-public class AddStaticTokenGatewayFilterFactory extends AbstractGatewayFilterFactory<Object> {
+public class AddStaticTokenScopeGatewayFilterFactory extends AbstractGatewayFilterFactory<Object> {
     @Autowired
     private ReactiveOAuth2AuthorizedClientManager authorizedClientManager;
     @Override

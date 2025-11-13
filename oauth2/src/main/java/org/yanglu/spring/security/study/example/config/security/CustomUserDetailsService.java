@@ -19,31 +19,42 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 1. 根据username查询你的用户实体
-        // PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        // UserDetails user =  User.builder()
-        //         .username("admin")
-        //         .password("admin")
-        //         .passwordEncoder(encoder::encode)
-        //         .roles("USER")
-        //         .authorities("1;2;3")
-        //         .build();
+        // PasswordEncoder encoder =
+        // PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        // UserDetails user = User.builder()
+        // .username("admin")
+        // .password("admin")
+        // .passwordEncoder(encoder::encode)
+        // .roles("USER")
+        // .authorities("1;2;3")
+        // .build();
         // if (user == null) {
-        //     throw new UsernameNotFoundException("用户未找到: " + username);
+        // throw new UsernameNotFoundException("用户未找到: " + username);
         // }
         // return user;
 
         // // 2. 查询该用户的权限/角色列表
-        // List<String> permissions = permissionService.findPermissionsByUserId(user.getId());
+        // List<String> permissions =
+        // permissionService.findPermissionsByUserId(user.getId());
 
         // // 3. 构建并返回自定义的CustomUserDetails
+        if ("admin".equals(username)) {
+            return new CustomUserDetails(
+                    1L,
+                    "admin",
+                    "{noop}adminpwd",
+                    "",
+                    List.of("ROLE_admin", "ROLE_normal"),
+                    true, true, true, true // 账户状态
+            );
+        }
         return new CustomUserDetails(
                 1L,
-                "admin",
-                "{noop}adminpwd",
+                "yanglu",
+                "{noop}yanglupwd",
                 "",
-                List.of("ROLE_role1", "ROLE_role2"),
+                List.of("ROLE_normal"),
                 true, true, true, true // 账户状态
         );
     }
 }
-

@@ -54,7 +54,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             // 获取要插入数据的容器元素
             const userListElement = document.getElementById('title')
-            const res = await fetch('http://127.0.0.1:10000/resource1/test')
+            const res = await fetch('http://127.0.0.1:10000/resource1/testroleadmin')
             if (res.status === 401) {
                 console.log('401未授权')
                 window.open('/oauth2/authorization/gateway?redirect_uri=http://127.0.0.1:10000/index.html', '_self')
