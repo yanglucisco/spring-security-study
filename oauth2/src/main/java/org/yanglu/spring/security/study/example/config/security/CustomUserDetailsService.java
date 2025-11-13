@@ -1,5 +1,6 @@
 package org.yanglu.spring.security.study.example.config.security;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.core.userdetails.User;
@@ -38,22 +39,27 @@ public class CustomUserDetailsService implements UserDetailsService {
         // permissionService.findPermissionsByUserId(user.getId());
 
         // // 3. 构建并返回自定义的CustomUserDetails
+        List<String> adminRoles = new ArrayList<>();
+        adminRoles.add("ROLE_admin");
+        adminRoles.add("ROLE_normal");
         if ("admin".equals(username)) {
             return new CustomUserDetails(
                     1L,
                     "admin",
                     "{noop}adminpwd",
                     "",
-                    List.of("ROLE_admin", "ROLE_normal"),
+                    adminRoles,
                     true, true, true, true // 账户状态
             );
         }
+        List<String> yangluRoles = new ArrayList<>();
+        yangluRoles.add("ROLE_normal");
         return new CustomUserDetails(
                 1L,
                 "yanglu",
                 "{noop}yanglupwd",
                 "",
-                List.of("ROLE_normal"),
+                yangluRoles,
                 true, true, true, true // 账户状态
         );
     }
