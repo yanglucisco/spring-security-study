@@ -13,12 +13,12 @@
     <module>servlet/spring-boot/java/hello</module>
     <module>servlet/spring-boot/java/hello-security</module>
     <module>servlet/spring-boot/java/hello-security-explicit</module>
-    <module>authentication</module>
+<!--    <module>authentication</module>-->
     <module>oauth2</module>
     <module>OAuthResourceServer</module>
     <module>OAuthClientServer</module>
     <module>gateway</module>
-    <module>test-abc</module>
+<!--    <module>test-abc</module>-->
     <module>oauth-client-server1</module>
     <module>thymeleaf-study</module>
     <module>oauth2-front</module>

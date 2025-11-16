@@ -16,7 +16,9 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
@@ -36,18 +38,19 @@ public class AddStaticTokenRoleGatewayFilterFactory extends AbstractGatewayFilte
                     .map(SecurityContext::getAuthentication);
             return authenticationMono.flatMap(authentication -> {
                 if (authentication != null && authentication.isAuthenticated()) {
-                    OAuth2AuthorizeRequest authorizeRequest = OAuth2AuthorizeRequest
-                                .withClientRegistrationId("gateway")
-                                .principal(authentication)
-                                .attribute(ServerWebExchange.class.getName(), exchange)
-                                .build();
 
-                    Mono<ServerHttpRequest> req = this.authorizedClientManager.authorize(authorizeRequest)
-                                .map(OAuth2AuthorizedClient::getAccessToken)
-                                .map((f) -> {
-                                    System.out.println("gatewayRole Bearer: " + f.getTokenValue());
-                                    return f.getTokenValue();
-                                })
+                    String tv = ((DefaultOidcUser) ((OAuth2AuthenticationToken) authentication).getPrincipal()).getIdToken().getTokenValue();
+
+//                    OAuth2AuthorizeRequest authorizeRequest = OAuth2AuthorizeRequest
+//                                .withClientRegistrationId("gateway")
+//                                .principal(authentication)
+//                                .attribute(ServerWebExchange.class.getName(), exchange)
+//                                .build();
+//                    this.authorizedClientManager.authorize(authorizeRequest).subscribe(a -> {
+//                        System.out.println("测试");
+//                    });
+
+                    Mono<ServerHttpRequest> req = Mono.just(tv)
                                 .map( token -> {
                                     ServerHttpRequest request = exchange.getRequest().mutate()
                                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)

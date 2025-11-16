@@ -27,6 +27,15 @@ public class AccessTokenCustomizerConfig {
                 // 也可以添加其他自定义声明，例如用户ID
                 // context.getClaims().claim("user_id", context.getPrincipal().getName());
             }
+            else
+            {
+                // 获取当前认证主体的权限信息
+                Set<String> authorities = context.getPrincipal().getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toSet());
+                // 将权限信息作为声明添加到JWT中
+                context.getClaims().claim("roles", authorities);
+            }
         };
     }
 }

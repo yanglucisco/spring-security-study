@@ -1,5 +1,6 @@
 package org.yanglu.spring.security.study.example.config;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -32,11 +33,18 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
         // if (roles == null || roles.isEmpty()) {
         //     roles = jwt.getClaimAsStringList("authorities");
         // }
-        List<String> scopesAndRoles = jwt.getClaimAsStringList("scope");
+        List<String> all = new ArrayList<>();
+        List<String> scopes = jwt.getClaimAsStringList("scope");
+        if(scopes != null){
+            all.addAll(scopes);
+        }
         List<String> roles = jwt.getClaimAsStringList("roles");
-        scopesAndRoles.addAll(roles);
-        if (!scopesAndRoles.isEmpty()) {
-            return scopesAndRoles.stream()
+        if(roles != null)
+        {
+            all.addAll(roles);
+        }
+        if (!all.isEmpty()) {
+            return all.stream()
                     // 确保角色有ROLE_前缀（hasRole()方法要求）
                     .map(item -> item.startsWith("ROLE_") ? item : "SCOPE_" + item)
                     .map(SimpleGrantedAuthority::new)
