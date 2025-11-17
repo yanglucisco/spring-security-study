@@ -13,7 +13,6 @@ import com.alibaba.csp.sentinel.adapter.gateway.common.api.ApiPathPredicateItem;
 import com.alibaba.csp.sentinel.adapter.gateway.common.api.ApiPredicateItem;
 import com.alibaba.csp.sentinel.adapter.gateway.common.api.GatewayApiDefinitionManager;
 import com.alibaba.csp.sentinel.adapter.gateway.common.rule.GatewayFlowRule;
-import com.alibaba.csp.sentinel.adapter.gateway.common.rule.GatewayParamFlowItem;
 import com.alibaba.csp.sentinel.adapter.gateway.common.rule.GatewayRuleManager;
 import com.alibaba.csp.sentinel.adapter.gateway.sc.SentinelGatewayFilter;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
@@ -98,7 +97,7 @@ public class GatewayConfiguration {
     @PostConstruct
     public void doInit() {
         // initCustomizedApis();
-        // initGatewayRules();
+        initGatewayFlowRule();
         initTestResourceDegradeRules();
     }
 
@@ -152,12 +151,16 @@ public class GatewayConfiguration {
         DegradeRuleManager.loadRules(rules);
         System.out.println("Degrade rule loaded: " + rules);
     }
-    @SuppressWarnings("unused")
-    private void initGatewayRules() {
+    private void initGatewayFlowRule() {
         Set<GatewayFlowRule> rules = new HashSet<>();
-        rules.add(new GatewayFlowRule("front1")
+        /**
+         * rule.setGrade(RuleConstant.FLOW_GRADE_QPS);
+        // Set limit QPS to 20.
+        rule.setCount(1);
+         */
+        rules.add(new GatewayFlowRule("resourcescope")
+            .setGrade(RuleConstant.FLOW_GRADE_QPS)
             .setCount(1)
-            .setIntervalSec(1)
         );
         // rules.add(new GatewayFlowRule("aliyun_route")
         //     .setCount(2)
@@ -167,44 +170,44 @@ public class GatewayConfiguration {
         //         .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_CLIENT_IP)
         //     )
         // );
-        rules.add(new GatewayFlowRule("httpbin_route")
-            .setCount(10)
-            .setIntervalSec(1)
-            .setControlBehavior(RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER)
-            .setMaxQueueingTimeoutMs(600)
-            .setParamItem(new GatewayParamFlowItem()
-                .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_HEADER)
-                .setFieldName("X-Sentinel-Flag")
-            )
-        );
-        rules.add(new GatewayFlowRule("httpbin_route")
-            .setCount(1)
-            .setIntervalSec(1)
-            .setParamItem(new GatewayParamFlowItem()
-                .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_URL_PARAM)
-                .setFieldName("pa")
-            )
-        );
-        rules.add(new GatewayFlowRule("httpbin_route")
-            .setCount(2)
-            .setIntervalSec(30)
-            .setParamItem(new GatewayParamFlowItem()
-                .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_URL_PARAM)
-                .setFieldName("type")
-                .setPattern("warn")
-                .setMatchStrategy(SentinelGatewayConstants.PARAM_MATCH_STRATEGY_CONTAINS)
-            )
-        );
+        // rules.add(new GatewayFlowRule("resourcescope")
+        //     .setCount(10)
+        //     .setIntervalSec(1)
+        //     .setControlBehavior(RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER)
+        //     .setMaxQueueingTimeoutMs(600)
+        //     .setParamItem(new GatewayParamFlowItem()
+        //         .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_HEADER)
+        //         .setFieldName("X-Sentinel-Flag")
+        //     )
+        // );
+        // rules.add(new GatewayFlowRule("httpbin_route")
+        //     .setCount(1)
+        //     .setIntervalSec(1)
+        //     .setParamItem(new GatewayParamFlowItem()
+        //         .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_URL_PARAM)
+        //         .setFieldName("pa")
+        //     )
+        // );
+        // rules.add(new GatewayFlowRule("httpbin_route")
+        //     .setCount(2)
+        //     .setIntervalSec(30)
+        //     .setParamItem(new GatewayParamFlowItem()
+        //         .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_URL_PARAM)
+        //         .setFieldName("type")
+        //         .setPattern("warn")
+        //         .setMatchStrategy(SentinelGatewayConstants.PARAM_MATCH_STRATEGY_CONTAINS)
+        //     )
+        // );
 
-        rules.add(new GatewayFlowRule("some_customized_api")
-            .setResourceMode(SentinelGatewayConstants.RESOURCE_MODE_CUSTOM_API_NAME)
-            .setCount(5)
-            .setIntervalSec(1)
-            .setParamItem(new GatewayParamFlowItem()
-                .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_URL_PARAM)
-                .setFieldName("pn")
-            )
-        );
+        // rules.add(new GatewayFlowRule("some_customized_api")
+        //     .setResourceMode(SentinelGatewayConstants.RESOURCE_MODE_CUSTOM_API_NAME)
+        //     .setCount(5)
+        //     .setIntervalSec(1)
+        //     .setParamItem(new GatewayParamFlowItem()
+        //         .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_URL_PARAM)
+        //         .setFieldName("pn")
+        //     )
+        // );
         GatewayRuleManager.loadRules(rules);
     }
 }

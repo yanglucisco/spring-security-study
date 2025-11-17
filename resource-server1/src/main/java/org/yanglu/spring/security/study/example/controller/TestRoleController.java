@@ -17,13 +17,13 @@ public class TestRoleController {
     @GetMapping("roleadmin")
     public String testroleadmin(Authentication authentication, HttpServletRequest request) {
         // String authHeader = request.getHeader("Authorization");
-        sleep(ThreadLocalRandom.current().nextInt(450, 1600));
+        sleep(ThreadLocalRandom.current().nextInt(10, 100));
         return "我是resource1的资源，当前用户必须是admin，当前时间:" + LocalDateTime.now().toString();
     }
     @GetMapping("rolenormal")
     public String testrolenormal(Authentication authentication, HttpServletRequest request) {
         // String authHeader = request.getHeader("Authorization");
-        sleep(ThreadLocalRandom.current().nextInt(450, 1600));
+        sleep(ThreadLocalRandom.current().nextInt(20, 100));
         return "我是resource1的资源，当前用户必须是normal，当前时间:" + LocalDateTime.now().toString();
     }
     private void sleep(int ms){
