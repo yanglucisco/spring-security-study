@@ -10,6 +10,10 @@ spring:
           uri: http://127.0.0.1:11002
           predicates:
            - Path=/,/*.css,/*.js,/home.html,/index.html,/test.html,/favicon.ico, /fronttest,/index1.html,/index2.html
+        - id: aliyun_route
+          uri: https://www.aliyun.com/
+          predicates:
+            - Path=/product/**
         - id: articles
           uri: http://127.0.0.1:8090
           predicates:

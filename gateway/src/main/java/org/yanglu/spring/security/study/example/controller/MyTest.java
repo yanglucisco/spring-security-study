@@ -2,15 +2,11 @@ package org.yanglu.spring.security.study.example.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.server.ServerWebExchange;
 
 import reactor.core.publisher.Mono;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,14 +28,12 @@ public class MyTest {
     }
     @GetMapping("test1")
     public String test1() {
-        return "test";
+        return "测试";
     }
+    @SuppressWarnings("null")
     @GetMapping("test2")
-    public Mono<String[]> test2(
-        // Authentication authentication, ServerWebExchange exchange
-        @RegisteredOAuth2AuthorizedClient("gateway1") OAuth2AuthorizedClient authorizedClient
+    public Mono<String[]> test2(@RegisteredOAuth2AuthorizedClient("gateway1") OAuth2AuthorizedClient authorizedClient
     ) {
-        var r = authorizedClient.getAccessToken().getTokenValue();
          return this.webClient
                 .get()
                 .uri("http://127.0.0.1:8090/articles")

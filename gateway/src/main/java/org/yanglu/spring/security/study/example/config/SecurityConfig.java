@@ -3,13 +3,11 @@ package org.yanglu.spring.security.study.example.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.config.Customizer;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProvider;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProviderBuilder;
@@ -28,27 +26,27 @@ import org.springframework.web.reactive.function.client.WebClient;
 @EnableWebFluxSecurity
 public class SecurityConfig {
         @Autowired
-    private RedirectToOriginalUrlAuthenticationSuccessHandler successHandler;
-//     @Autowired
-//     private ReactiveClientRegistrationRepository clientRegistrationRepository;
+        private RedirectToOriginalUrlAuthenticationSuccessHandler successHandler;
+        // @Autowired
+        // private ReactiveClientRegistrationRepository clientRegistrationRepository;
 
         @Bean
-        @SuppressWarnings("unused")
-    WebClient webClient(ReactiveOAuth2AuthorizedClientManager authorizedClientManager) {
-         // 创建 OAuth2 过滤器功能函数，这是自动携带令牌的关键
-        ServerOAuth2AuthorizedClientExchangeFilterFunction oauth2Filter =
-            new ServerOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
-        
-        // 可选：设置为自动使用已授权的客户端（例如，基于当前安全上下文）
-        oauth2Filter.setDefaultOAuth2AuthorizedClient(true);
-        // 可选：设置默认的客户端注册ID，如果请求时未指定则使用此ID
-        // oauth2Filter.setDefaultClientRegistrationId("your-client-registration-id");
+        WebClient webClient(ReactiveOAuth2AuthorizedClientManager authorizedClientManager) {
+                // 创建 OAuth2 过滤器功能函数，这是自动携带令牌的关键
+                ServerOAuth2AuthorizedClientExchangeFilterFunction oauth2Filter = new ServerOAuth2AuthorizedClientExchangeFilterFunction(
+                                authorizedClientManager);
 
-        // 构建 WebClient 并添加 OAuth2 过滤器
-        return WebClient.builder()
-                .filter(oauth2Filter) // 添加OAuth2令牌中继功能
-                .build();
-    }
+                // 可选：设置为自动使用已授权的客户端（例如，基于当前安全上下文）
+                oauth2Filter.setDefaultOAuth2AuthorizedClient(true);
+                // 可选：设置默认的客户端注册ID，如果请求时未指定则使用此ID
+                // oauth2Filter.setDefaultClientRegistrationId("your-client-registration-id");
+
+                // 构建 WebClient 并添加 OAuth2 过滤器
+                return WebClient.builder()
+                                .filter(oauth2Filter) // 添加OAuth2令牌中继功能
+                                .build();
+        }
+
         @Bean
         public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(
                         ReactiveClientRegistrationRepository clientRegistrationRepository,
@@ -67,15 +65,15 @@ public class SecurityConfig {
         }
 
         @Bean
-        @SuppressWarnings("unused")
         SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http,
                         ReactiveClientRegistrationRepository reactiveClientRegistrationRepository) throws Exception {
-                                // 实例化自定义解析器
-        CustomAuthorizationRequestResolver customResolver = 
-            new CustomAuthorizationRequestResolver(reactiveClientRegistrationRepository);
+                // 实例化自定义解析器
+                CustomAuthorizationRequestResolver customResolver = new CustomAuthorizationRequestResolver(
+                                reactiveClientRegistrationRepository);
                 http.authorizeExchange(exchange -> exchange
                                 .pathMatchers("/", "/*.css", "/*.js", "/*.html", "/favicon.ico",
-                                                "/test123123", "/login", "/resourcerole123/roleadmin")
+                                                "/test123123", "/login", "/resourcerole123/roleadmin",
+                                                "/sentinel/**")
                                 .permitAll()
                                 .anyExchange().authenticated())
                                 // 前后端分离项目，请求后端数据时，不应该返回302，而是应该返回401
@@ -83,11 +81,10 @@ public class SecurityConfig {
                                                 .authenticationEntryPoint(new HttpStatusServerEntryPoint(
                                                                 HttpStatus.UNAUTHORIZED)))
                                 .oauth2Login(
-                                //      withDefaults()   
-                                c -> 
-                                c.authorizationRequestResolver(customResolver) // 注册自定义解析器
-                                .authenticationSuccessHandler(successHandler)
-                                
+                                                // withDefaults()
+                                                c -> c.authorizationRequestResolver(customResolver) // 注册自定义解析器
+                                                                .authenticationSuccessHandler(successHandler)
+
                                 )
                                 .logout(logout -> logout.logoutSuccessHandler(
                                                 // 定义一个自定义的处理器，用于退出操作成功完成的场景
