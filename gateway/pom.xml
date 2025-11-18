@@ -56,6 +56,11 @@
             <artifactId>sentinel-spring-cloud-gateway-adapter</artifactId>
             <version>1.8.8</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-all</artifactId>
+            <version>2.3.0</version>
+        </dependency>
         <!-- <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-alibaba-sentinel-gateway</artifactId>
