@@ -35,6 +35,10 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.yanglu.spring.security.study.example</groupId>
+            <artifactId>spring-security-common</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

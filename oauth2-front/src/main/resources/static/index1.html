@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>index1111111页面</title>
+    <title>index11111页面</title>
     <script>
         function getCsrfToken() {
             const cookieValue = document.cookie
@@ -45,23 +45,35 @@
             value="" />
         <input type="submit" value="退出登录" />
     </form>
-    <h1>我是index111111111111111111111.html</h1>
+    <h1>我是index11111111.html</h1>
     <!-- <span>点击后，从后台获取数据，如果未登录，则跳转到收取服务器的登录页面</span> -->
     <!-- <button onclick="postTest()">退出登录csrf</button> -->
-    <h1 id="title">我是title的默认值</h1>
+    <h1 id="scope">后台要求scope的内容</h1>
+    <h1 id="role">后台要求role内容</h1>
     
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             // 获取要插入数据的容器元素
-            const userListElement = document.getElementById('title')
-            const res = await fetch('http://127.0.0.1:10000/resource1/test')
-            if (res.status === 401) {
+            const scope = document.getElementById('scope')
+            const scopeRes = await fetch('http://127.0.0.1:10000/resourcescope0/test')
+            if (scopeRes.status === 401) {
                 console.log('401未授权')
                 window.open('/oauth2/authorization/gateway?redirect_uri=http://127.0.0.1:10000/index1.html', '_self')
                 return
             }
-            const data = await res.text()
-            userListElement.innerHTML = data
+            const scopeData = await scopeRes.text()
+            scope.innerHTML = scopeData
+
+            // 获取要插入数据的容器元素
+            const role = document.getElementById('role')
+            const roleRes = await fetch('http://127.0.0.1:10000/resourcerole0/roleadmin')
+            if (roleRes.status === 401) {
+                console.log('401未授权')
+                window.open('/oauth2/authorization/gateway?redirect_uri=http://127.0.0.1:10000/index1.html', '_self')
+                return
+            }
+            const roleData = await roleRes.text()
+            role.innerHTML = roleData
         })
         document.getElementById('logoutForm').addEventListener('submit', function (event) {
             // 阻止表单默认提交行为

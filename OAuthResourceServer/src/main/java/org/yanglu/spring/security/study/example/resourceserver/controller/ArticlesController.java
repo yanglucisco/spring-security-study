@@ -1,4 +1,4 @@
-package org.yanglu.spring.security.study.example;
+package org.yanglu.spring.security.study.example.resourceserver.controller;
 
 import java.time.LocalDateTime;
 

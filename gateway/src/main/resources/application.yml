@@ -58,6 +58,18 @@ spring:
            - Path=/resourcescope/**
           filters:
            - name: AddStaticTokenScope # 使用自定义过滤器添加指定令牌
+        - id: resourcerole0
+          uri: http://127.0.0.1:8090
+          predicates:
+           - Path=/resourcerole0/**
+          filters:
+           - name: AddStaticTokenRole # 使用自定义过滤器添加指定令牌
+        - id: resourcescope0
+          uri: http://127.0.0.1:8090
+          predicates:
+           - Path=/resourcescope0/**
+          filters:
+           - name: AddStaticTokenScope # 使用自定义过滤器添加指定令牌
   security:
     oauth2:
       client:
