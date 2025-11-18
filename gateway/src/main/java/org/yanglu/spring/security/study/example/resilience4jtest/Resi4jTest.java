@@ -96,6 +96,7 @@ public class Resi4jTest {
     // var backendService = new Resi4jTestService();
     Supplier<String> supplier = CircuitBreaker.decorateSupplier(circuitBreaker, () -> {
       int i = ThreadLocalRandom.current().nextInt(20, 100);
+      log.info("i = " + i);
         if(i > 61){
             throw new RuntimeException("值大于61了，所以抛出了异常");
         }
