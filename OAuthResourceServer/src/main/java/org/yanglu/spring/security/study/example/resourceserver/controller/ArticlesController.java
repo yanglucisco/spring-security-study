@@ -1,9 +1,12 @@
 package org.yanglu.spring.security.study.example.resourceserver.controller;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.ThreadLocalRandom;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpServerErrorException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,9 +15,22 @@ import lombok.extern.slf4j.Slf4j;
 public class ArticlesController {
 
     @GetMapping("/articles")
-    public String[] getArticles() {
+    public String getArticles() {
         log.info("获取articles... ...");
-        return new String[] { "Article 1", "Article 2", "Article 3", "4", "5", LocalDateTime.now().toString() };
+        // sleep(ThreadLocalRandom.current().nextInt(1000, 3000));
+         if (Math.random() > 0.3) {
+            log.info("This is a remote exception111111111111111111");
+            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "This is a remote exception");
+        }
+        return LocalDateTime.now().toString();
+        // return new String[] { "Article 1", "Article 2", "Article 3", "4", "5", LocalDateTime.now().toString() };
+    }
+    public static void sleep(int ms){
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     @GetMapping("/test")
     public String test() {

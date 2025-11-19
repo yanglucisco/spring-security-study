@@ -113,7 +113,34 @@ spring:
     timeout: 120m
     redis:
       namespace: polar:edge
-
+resilience4j.circuitbreaker:
+    configs:
+        default:
+            registerHealthIndicator: true
+            slidingWindowSize: 10
+            minimumNumberOfCalls: 5
+            permittedNumberOfCallsInHalfOpenState: 3
+            automaticTransitionFromOpenToHalfOpenEnabled: true
+            waitDurationInOpenState: 15s
+            failureRateThreshold: 50
+            eventConsumerBufferSize: 10
+            recordExceptions:
+                - org.springframework.web.client.HttpServerErrorException
+                - java.util.concurrent.TimeoutException
+                - java.io.IOException
+            # ignoreExceptions:
+            #     - io.github.robwin.exception.BusinessException
+        shared:
+            slidingWindowSize: 100
+            permittedNumberOfCallsInHalfOpenState: 30
+            waitDurationInOpenState: 1s
+            failureRateThreshold: 50
+            eventConsumerBufferSize: 10
+            # ignoreExceptions:
+            #     - io.github.robwin.exception.BusinessException
+    instances:
+        backendA:
+            baseConfig: default
 logging:
   level:
     '[org.springframework.cloud.gateway]': DEBUG  # 开启网关核心日志
