@@ -26,7 +26,7 @@ public class TestRoleController {
         sleep(ThreadLocalRandom.current().nextInt(20, 100));
         return "我是resource1的资源，当前用户必须是normal，当前时间:" + LocalDateTime.now().toString();
     }
-    private void sleep(int ms){
+    public static void sleep(int ms){
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
