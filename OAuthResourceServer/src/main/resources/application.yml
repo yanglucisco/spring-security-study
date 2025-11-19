@@ -6,16 +6,29 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://auth-server:9000
-#      client:
-#        registration:
-#          articles-client-authorization-code:
-#            provider: spring
-#            client-id: account-service
-#            client-secret: account-service-secret
-#            authorization-grant-type: client_credentials
-##            redirect-uri: "http://127.0.0.1:8080/authorized"
-#            scope: server
-#            client-name: articles-client-authorization-code
-#        provider:
-#          spring:
-#            issuer-uri: http://auth-server:9000
+      client:
+        registration:
+          resource-server:
+           provider: spring
+           client-id: resource-server
+           client-secret: resource-server
+           authorization-grant-type: client_credentials
+           scope: 
+            - articles.read
+           client-name: resource-server
+        provider:
+          spring:
+           issuer-uri: http://auth-server:9000
+# security:
+#     oauth2:
+#       client:
+#         registration:
+# gateway-scope:
+#             provider: spring
+#             client-id: gateway
+#             client-secret: gatewaysecret
+#             authorization-grant-type: client_credentials
+#             redirect-uri: "http://127.0.0.1:10000/login/oauth2/code/{registrationId}"
+#             scope: 
+#              - articles.read
+#             client-name: gateway

@@ -65,15 +65,15 @@
             scope.innerHTML = scopeData
 
             // 获取要插入数据的容器元素
-            const role = document.getElementById('role')
-            const roleRes = await fetch('http://127.0.0.1:10000/resourcerole0/roleadmin')
-            if (roleRes.status === 401) {
-                console.log('401未授权')
-                window.open('/oauth2/authorization/gateway?redirect_uri=http://127.0.0.1:10000/index1.html', '_self')
-                return
-            }
-            const roleData = await roleRes.text()
-            role.innerHTML = roleData
+            // const role = document.getElementById('role')
+            // const roleRes = await fetch('http://127.0.0.1:10000/resourcerole0/roleadmin')
+            // if (roleRes.status === 401) {
+            //     console.log('401未授权')
+            //     window.open('/oauth2/authorization/gateway?redirect_uri=http://127.0.0.1:10000/index1.html', '_self')
+            //     return
+            // }
+            // const roleData = await roleRes.text()
+            // role.innerHTML = roleData
         })
         document.getElementById('logoutForm').addEventListener('submit', function (event) {
             // 阻止表单默认提交行为

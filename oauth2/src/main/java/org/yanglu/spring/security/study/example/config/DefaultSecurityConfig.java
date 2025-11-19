@@ -180,11 +180,34 @@ public class DefaultSecurityConfig {
                 .tokenSettings(TokenSettings.builder().refreshTokenTimeToLive(Duration.ofHours(5))
                                                       .accessTokenTimeToLive(Duration.ofHours(5)).build())
                 .build();
+
+        RegisteredClient resourceServer = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("resource-server")
+                .clientSecret("{noop}resource-server")
+                .clientName("resource-server")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantTypes(gts -> {
+                    gts.add(AuthorizationGrantType.AUTHORIZATION_CODE);
+                    gts.add(AuthorizationGrantType.REFRESH_TOKEN);
+                    gts.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
+                })
+                .redirectUris((uris -> {
+                    uris.add("http://127.0.0.1:8090/login/oauth2/code/resource-server");
+                }))
+                .scopes(s -> {
+                    // s.add("openid");
+                    s.add("articles.read");
+                    // s.add("server");
+                })
+                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+                .tokenSettings(TokenSettings.builder().refreshTokenTimeToLive(Duration.ofHours(5))
+                                                      .accessTokenTimeToLive(Duration.ofHours(5)).build())
+                .build();
         List<RegisteredClient> clients = new ArrayList<>();
         clients.add(articlesClient);
         clients.add(articlesClient1);
         clients.add(gateway);
-        // clients.add(articlesClientRead);
+        clients.add(resourceServer);
 
         return new InMemoryRegisteredClientRepository(clients);
     }
