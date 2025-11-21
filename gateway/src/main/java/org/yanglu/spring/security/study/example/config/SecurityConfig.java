@@ -3,7 +3,11 @@ package org.yanglu.spring.security.study.example.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+
 import static org.springframework.security.config.Customizer.withDefaults;
+
+import java.time.Duration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -21,6 +25,9 @@ import org.springframework.security.web.server.authentication.HttpStatusServerEn
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import io.netty.channel.ChannelOption;
+import reactor.netty.http.client.HttpClient;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -40,10 +47,15 @@ public class SecurityConfig {
                 oauth2Filter.setDefaultOAuth2AuthorizedClient(true);
                 // 可选：设置默认的客户端注册ID，如果请求时未指定则使用此ID
                 // oauth2Filter.setDefaultClientRegistrationId("your-client-registration-id");
-
+                
+               // 1. 创建并配置 HttpClient
+        HttpClient httpClient = HttpClient.create()
+            .responseTimeout(Duration.ofSeconds(1)) // 响应超时 10 秒[3](@ref)[6](@ref)
+            .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 1); 
                 // 构建 WebClient 并添加 OAuth2 过滤器
                 return WebClient.builder()
                                 .filter(oauth2Filter) // 添加OAuth2令牌中继功能
+                                // .clientConnector(new ReactorClientHttpConnector(httpClient))
                                 .build();
         }
 

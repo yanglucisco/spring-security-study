@@ -15,10 +15,14 @@ public class Resi4jTestController {
     public Resi4jTestController(Resi4jTestService resi4jTestService){
         this.resi4jTestService = resi4jTestService;
     }
-    @RequestMapping("test")
-    public String test(
+    @RequestMapping("testlocalcall")
+    public String test(){
+        return resi4jTestService.testLocalCall();
+    }
+    @RequestMapping("testremotecall")
+    public Mono<String> testremotecall(
         @RegisteredOAuth2AuthorizedClient("gateway-scope") OAuth2AuthorizedClient authorizedClient
     ){
-        return resi4jTestService.test(authorizedClient);
+        return resi4jTestService.testRemoteCall(authorizedClient);
     }
 }

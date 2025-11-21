@@ -17,12 +17,13 @@ public class ArticlesController {
     @GetMapping("/articles")
     public String getArticles() {
         log.info("获取articles... ...");
+        throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "This is a remote exception");
         // sleep(ThreadLocalRandom.current().nextInt(1000, 3000));
-         if (Math.random() > 0.3) {
-            log.info("This is a remote exception111111111111111111");
-            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "This is a remote exception");
-        }
-        return LocalDateTime.now().toString();
+        //  if (Math.random() > 0.3) {
+        //     log.info("This is a remote exception111111111111111111");
+        //     throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "This is a remote exception");
+        // }
+        // return "Resource 资源：" + LocalDateTime.now().toString();
         // return new String[] { "Article 1", "Article 2", "Article 3", "4", "5", LocalDateTime.now().toString() };
     }
     public static void sleep(int ms){
