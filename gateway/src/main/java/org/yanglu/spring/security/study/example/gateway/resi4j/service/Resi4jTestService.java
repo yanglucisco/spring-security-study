@@ -19,6 +19,7 @@ import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.reactor.circuitbreaker.operator.CircuitBreakerOperator;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import io.netty.handler.timeout.TimeoutException;
 import lombok.extern.slf4j.Slf4j;
@@ -65,8 +66,11 @@ public class Resi4jTestService {
     }
 
     @SuppressWarnings("null")
-    @CircuitBreaker(name = BACKEND_A, fallbackMethod = "monoFallback")
+    @CircuitBreaker(name = BACKEND_A
+        // , fallbackMethod = "monoFallback"
+    )
     @TimeLimiter(name = BACKEND_A) 
+    @Retry(name = BACKEND_A)
     public Mono<String> testRemoteCall(OAuth2AuthorizedClient authorizedClient) {
         var backendCall =
         this.webClient

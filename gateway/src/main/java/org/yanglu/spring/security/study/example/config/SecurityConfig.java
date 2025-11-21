@@ -47,11 +47,6 @@ public class SecurityConfig {
                 oauth2Filter.setDefaultOAuth2AuthorizedClient(true);
                 // 可选：设置默认的客户端注册ID，如果请求时未指定则使用此ID
                 // oauth2Filter.setDefaultClientRegistrationId("your-client-registration-id");
-                
-               // 1. 创建并配置 HttpClient
-        HttpClient httpClient = HttpClient.create()
-            .responseTimeout(Duration.ofSeconds(1)) // 响应超时 10 秒[3](@ref)[6](@ref)
-            .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 1); 
                 // 构建 WebClient 并添加 OAuth2 过滤器
                 return WebClient.builder()
                                 .filter(oauth2Filter) // 添加OAuth2令牌中继功能

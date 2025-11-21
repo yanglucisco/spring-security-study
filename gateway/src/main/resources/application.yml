@@ -152,9 +152,32 @@ resilience4j.timelimiter:
             baseConfig: default
         backendB:
             baseConfig: default
+resilience4j.retry:
+    configs:
+        default:
+            maxAttempts: 3
+            waitDuration: 40000
+            retryExceptions:
+                - org.springframework.web.client.HttpServerErrorException
+                - java.util.concurrent.TimeoutException
+                - java.io.IOException
+                - java.lang.Exception
+            # ignoreExceptions:
+            #     - io.github.robwin.exception.BusinessException
+    instances:
+        backendA:
+            baseConfig: default
+        backendB:
+            baseConfig: default
 logging:
   level:
-    '[org.springframework.cloud.gateway]': DEBUG  # 开启网关核心日志
-    '[org.springframework.http.server.reactive]': DEBUG  # 打印HTTP请求细节[2](@ref)[8](@ref)
+    # '[org.springframework.cloud.gateway]': DEBUG  # 开启网关核心日志
+    # '[org.springframework.http.server.reactive]': DEBUG  # 打印HTTP请求细节[2](@ref)[8](@ref)
+    # 设置 Resilience4j 核心组件的日志级别
+    io.github.resilience4j: DEBUG # 设置整个 Resilience4j 库的日志级别为 DEBUG
+    io.github.resilience4j.circuitbreaker: DEBUG # 特别设置断路器的日志级别
+    io.github.resilience4j.retry: DEBUG # 特别设置重试机制的日志级别
+    # 设置你自己服务接口或实现类的日志级别，以便查看 Resilience4j 注解的实际作用效果
+    org.yanglu.spring.security.study.example.gateway.resi4j.service.Resi4jTestService: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"  # 自定义日志格式[10](@ref)
