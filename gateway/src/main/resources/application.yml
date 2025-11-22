@@ -5,6 +5,9 @@ spring:
     name: gateway
   cloud:
     gateway:
+      httpclient:
+        connect-timeout: 1000   # 连接超时时间，单位毫秒 (ms)[5](@ref)
+        response-timeout: 2s   
       routes:
         - id: front
           uri: http://127.0.0.1:11002
@@ -76,10 +79,24 @@ spring:
            - Path=/testresil4j/**
           filters:
             - StripPrefix=1        # 转发前去掉第一层路径 /client
+            - name: Retry
+              args:
+                retries: 3  # 最大重试次数（包括首次请求）
+                series: CLIENT_ERROR, SERVER_ERROR  # 对哪些HTTP状态码系列进行重试（如5xx）
+                methods: GET  # 对哪些HTTP方法进行重试
+                exceptions: java.io.IOException, java.util.concurrent.TimeoutException, org.springframework.web.client.HttpServerErrorException, java.lang.Exception  # 对哪些异常进行重试
+                backoff:
+                  firstBackoff: 10000ms  # 首次回退延迟
+                  maxBackoff: 20s       # 最大回退延迟
+                  factor: 2            # 延迟倍数（指数退避因子）
+                  basedOnPreviousValue: false  # 是否基于上一次重试的延迟时间 
+                jitter:
+                  randomFactor: 0.5
+                timeout: 100ms
             - name: CircuitBreaker
               args:
                 name: backendA
-                fallbackUri: forward:/fallback/backenda                
+                fallbackUri: forward:/fallback/backenda      
   security:
     oauth2:
       client:
@@ -166,7 +183,7 @@ resilience4j.retry:
     configs:
         default:
             maxAttempts: 3
-            waitDuration: 40000
+            waitDuration: 10000
             retryExceptions:
                 - org.springframework.web.client.HttpServerErrorException
                 - java.util.concurrent.TimeoutException
@@ -181,13 +198,15 @@ resilience4j.retry:
             baseConfig: default
 logging:
   level:
-    # '[org.springframework.cloud.gateway]': DEBUG  # 开启网关核心日志
-    # '[org.springframework.http.server.reactive]': DEBUG  # 打印HTTP请求细节[2](@ref)[8](@ref)
+    org.springframework.cloud.gateway: DEBUG  # 开启网关核心日志
+    org.springframework.http.server.reactive: DEBUG  # 打印HTTP请求细节[2](@ref)[8](@ref)
+    org.springframework.web.reactive: DEBUG # 反应式Web日志
     # 设置 Resilience4j 核心组件的日志级别
     io.github.resilience4j: DEBUG # 设置整个 Resilience4j 库的日志级别为 DEBUG
     io.github.resilience4j.circuitbreaker: DEBUG # 特别设置断路器的日志级别
     io.github.resilience4j.retry: DEBUG # 特别设置重试机制的日志级别
     # 设置你自己服务接口或实现类的日志级别，以便查看 Resilience4j 注解的实际作用效果
     org.yanglu.spring.security.study.example.gateway.resi4j.service.Resi4jTestService: DEBUG
+    reactor.netty: DEBUG # 网络层日志（关键）
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"  # 自定义日志格式[10](@ref)

@@ -10,6 +10,7 @@ import io.github.resilience4j.core.registry.EntryAddedEvent;
 import io.github.resilience4j.core.registry.EntryRemovedEvent;
 import io.github.resilience4j.core.registry.EntryReplacedEvent;
 import io.github.resilience4j.core.registry.RegistryEventConsumer;
+import io.github.resilience4j.retry.Retry;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -47,6 +48,26 @@ public class GatewayApp
             @Override
             public void onEntryReplacedEvent(EntryReplacedEvent<CircuitBreaker> entryReplacedEvent) {
                 log.info("onEntryReplacedEvent aaabbbccc222: " + entryReplacedEvent.toString());
+            }
+        };
+    }
+    @Bean
+    public RegistryEventConsumer<Retry> myRetryRegistryEventConsumer() {
+
+        return new RegistryEventConsumer<Retry>() {
+            @Override
+            public void onEntryAddedEvent(EntryAddedEvent<Retry> entryAddedEvent) {
+                entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> log.info("Retry event abc " + event.toString()));
+            }
+
+            @Override
+            public void onEntryRemovedEvent(EntryRemovedEvent<Retry> entryRemoveEvent) {
+                log.info("Retry event abc " + entryRemoveEvent.toString());
+            }
+
+            @Override
+            public void onEntryReplacedEvent(EntryReplacedEvent<Retry> entryReplacedEvent) {
+                log.info("Retry event abc " + entryReplacedEvent.toString());
             }
         };
     }
