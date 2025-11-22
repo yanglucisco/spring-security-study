@@ -70,6 +70,16 @@ spring:
            - Path=/resourcescope0/**
           filters:
            - name: AddStaticTokenScope # 使用自定义过滤器添加指定令牌
+        - id: testresil4j
+          uri: http://127.0.0.1:9081
+          predicates:
+           - Path=/testresil4j/**
+          filters:
+            - StripPrefix=1        # 转发前去掉第一层路径 /client
+            - name: CircuitBreaker
+              args:
+                name: backendA
+                fallbackUri: forward:/fallback/backenda                
   security:
     oauth2:
       client:

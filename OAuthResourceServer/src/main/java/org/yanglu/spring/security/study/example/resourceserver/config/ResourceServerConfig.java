@@ -26,6 +26,7 @@ public class ResourceServerConfig {
                     jwt->jwt.jwtAuthenticationConverter(customJwtAuthenticationConverter)
                     ))
                 .authorizeHttpRequests(auth -> auth
+                                .requestMatchers("/testcf/**").permitAll()
                                 .requestMatchers("/testResi4j/**").permitAll()
                                 .requestMatchers("/articles/**").hasAuthority("SCOPE_articles.read")
                                 .requestMatchers("/test/**").hasAuthority("SCOPE_server")
