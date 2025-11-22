@@ -79,24 +79,32 @@ spring:
            - Path=/testresil4j/**
           filters:
             - StripPrefix=1        # 转发前去掉第一层路径 /client
-            - name: Retry
+          #   - name: Retry
+          #     args:
+          #       retries: 3  # 最大重试次数（包括首次请求）
+          #       series: CLIENT_ERROR, SERVER_ERROR  # 对哪些HTTP状态码系列进行重试（如5xx）
+          #       methods: GET  # 对哪些HTTP方法进行重试
+          #       exceptions: java.io.IOException, java.util.concurrent.TimeoutException, org.springframework.web.client.HttpServerErrorException, java.lang.Exception  # 对哪些异常进行重试
+          #       backoff:
+          #         firstBackoff: 10000ms  # 首次回退延迟
+          #         maxBackoff: 20s       # 最大回退延迟
+          #         factor: 2            # 延迟倍数（指数退避因子）
+          #         basedOnPreviousValue: false  # 是否基于上一次重试的延迟时间 
+          #       jitter:
+          #         randomFactor: 0.5
+          #       timeout: 100ms
+          #   - name: CircuitBreaker
+          #     args:
+          #       name: backendA
+          #       fallbackUri: forward:/fallback/backenda
+            - name: RequestRateLimiter  # 固定使用此过滤器名称
               args:
-                retries: 3  # 最大重试次数（包括首次请求）
-                series: CLIENT_ERROR, SERVER_ERROR  # 对哪些HTTP状态码系列进行重试（如5xx）
-                methods: GET  # 对哪些HTTP方法进行重试
-                exceptions: java.io.IOException, java.util.concurrent.TimeoutException, org.springframework.web.client.HttpServerErrorException, java.lang.Exception  # 对哪些异常进行重试
-                backoff:
-                  firstBackoff: 10000ms  # 首次回退延迟
-                  maxBackoff: 20s       # 最大回退延迟
-                  factor: 2            # 延迟倍数（指数退避因子）
-                  basedOnPreviousValue: false  # 是否基于上一次重试的延迟时间 
-                jitter:
-                  randomFactor: 0.5
-                timeout: 100ms
-            - name: CircuitBreaker
-              args:
-                name: backendA
-                fallbackUri: forward:/fallback/backenda      
+                # 引用上面定义的KeyResolver Bean，使用SpEL表达式
+                key-resolver: "#{@ipKeyResolver}"
+                # 令牌桶每秒填充的平均速率（即允许的每秒请求数）
+                redis-rate-limiter.replenishRate: 1
+                # 令牌桶的总容量（即允许的瞬时最大突发请求数）
+                redis-rate-limiter.burstCapacity: 1 
   security:
     oauth2:
       client:
@@ -196,6 +204,21 @@ resilience4j.retry:
             baseConfig: default
         backendB:
             baseConfig: default
+resilience4j.ratelimiter:
+    configs:
+        default:
+            registerHealthIndicator: false
+            limitForPeriod: 1
+            limitRefreshPeriod: 1s
+            timeoutDuration: 0
+            eventConsumerBufferSize: 100
+    instances:
+        backendA:
+            baseConfig: default
+        backendB:
+            limitForPeriod: 6
+            limitRefreshPeriod: 500ms
+            timeoutDuration: 3s
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG  # 开启网关核心日志
