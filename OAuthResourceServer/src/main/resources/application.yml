@@ -19,6 +19,11 @@ spring:
         provider:
           spring:
            issuer-uri: http://auth-server:9000
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: root
+    password: Htht123.com
 # security:
 #     oauth2:
 #       client:
