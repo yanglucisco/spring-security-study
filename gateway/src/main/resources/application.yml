@@ -221,6 +221,7 @@ resilience4j.ratelimiter:
             timeoutDuration: 3s
 logging:
   level:
+    org.yanglu.spring.security.study.example.controller: DEBUG
     org.springframework.cloud.gateway: DEBUG  # 开启网关核心日志
     org.springframework.http.server.reactive: DEBUG  # 打印HTTP请求细节[2](@ref)[8](@ref)
     org.springframework.web.reactive: DEBUG # 反应式Web日志
